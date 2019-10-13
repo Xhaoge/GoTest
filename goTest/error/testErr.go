@@ -1,6 +1,7 @@
 package main
 
-import "fmt"
+import ("fmt"
+		"errors")
 
 // 定义一个 DivideError 结构；
 type DivideError struct {
@@ -27,6 +28,28 @@ func Divide(varDividee int, varDivider int) (result int, errorMsg string) {
 		return varDividee / varDivider, ""
 	}
 }
+//函数去读取以配置文件init.conf 的信息；
+//如果传入的文件名不正确，我们就返回一个自定义的错误；
+
+func readConf(name string)(err error){
+	if name == "config.ini"{
+		//读取；
+		return nil
+	}else{
+		//返回一个自定义错误；
+		return errors.New("读取文件错误。。。。")
+	}
+}
+
+func test02(){
+	err := readConf("config2.ini")
+	if err != nil{
+		//读取文件发送错误，就输出这个错误，并终止程序；
+		panic(err)
+	}
+	fmt.Println("test02() continue")
+}
+
 
 func main() {
 	fmt.Println("nima")
@@ -38,4 +61,5 @@ func main() {
 	if _, err := Divide(100, 0); err != "" {
 		fmt.Println("errorMsg is :", err)
 	}
+	test02()
 }
