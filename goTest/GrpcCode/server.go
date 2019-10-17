@@ -1,11 +1,12 @@
 package main
 
 import (
-	"GOlang/goTest/GrpcCode/message"
 	"errors"
 	"net"
 	"net/http"
 	"time"
+
+	"golang/goTest/GrpcCode/message"
 
 	"google.golang.org/grpc"
 )
@@ -28,12 +29,12 @@ func (os *OrderServiceImpl) GetOrderInfo(request message.OrderRequest, response 
 		result := orderMap[request.OrderId]
 		if result.OrderId != "" {
 			*response = orderMap[request.OrderId]
-			return &result, nil
+			return nil
 		} else {
 			return errors.New("server error")
 		}
 	}
-	return response, nil
+	return nil
 }
 
 func main() {
