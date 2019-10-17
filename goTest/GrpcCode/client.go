@@ -1,29 +1,30 @@
 package main
 
 import (
+	"google.golang.org/grpc"
 	"GOlang/goTest/GrpcCode/message"
 	"context"
 	"fmt"
 	"time"
-	"net/grpc"
-	"google.golang.org/grpc"
 )
 
 func main() {
-	client, err := grpc.DialHTTP("localhost:8089", grpc.WithInsecure)
+	client, err := grpc.Dial("localhost:8089", grpc.WithInsecure())
 	if err != nil {
 		panic(err.Error())
 	}
 	defer client.Close()
 
-	OrderServiceClient := message.NewOrderServiceServer(client)
+	OrderServiceClient := message.NewOrderServiceClient(client)
 
-	orderRequest := &message.OrderRequest{OrderId: "201907300003", TimeStamp: time.Now().Unix()}
-	orderInfo, err := OrderServiceClient.GetOrderInfo(context.Background(), orderRequest)
+	orderRequest := &message.OrderRequest{OrderId: "201907300001", TimeStamp: time.Now().Unix()}
+	orderInf, err := OrderServiceClient.GetOrderInfo(context.Background(), orderRequest)
 
-	if orderInfo != nil {
-		fmt.Println(orderInfo.GetOrderId())
-		fmt.Println(orderInfo.GetOrderName())
-		fmt.Println(orderInfo.GetOrderStatus())
+	fmt.Println("nima,where")
+	fmt.Println(orderInf.GetOrderId())
+	if orderInf != nil {
+		fmt.Println(orderInf.GetOrderId())
+		fmt.Println(orderInf.GetOrderName())
+		fmt.Println(orderInf.GetOrderStatus())
 	}
 }
