@@ -2,7 +2,7 @@ package main
 
 import (
 	"google.golang.org/grpc"
-	"GOlang/goTest/GrpcCode/message"
+	"GOlang/goTest/socket/GrpcCode/message"
 	"context"
 	"errors"
 	"net"

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"GOlang/goTest/RpcCode/RpcAndProto/message"
+	"GOlang/goTest/socket/RpcCode/message"
 	"errors"
 	"net"
 	"net/http"
