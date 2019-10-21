@@ -43,7 +43,7 @@ type person struct {
 }
 
 func (p person) getName() {
-	fmt.Printf("%s %s\n", p.firstName, p.lastName)
+	fmt.Printf("\n%s %s\n", p.firstName, p.lastName)
 }
 
 func main() {
@@ -56,5 +56,15 @@ func main() {
 	}
 	defer zz.getName()
 	fmt.Println("welcome,")
+	// string 操作；
+	name := "Hello World"
+    for i:= 0; i < len(name); i++ {
+        fmt.Printf("%d ", name[i])
+	}
+	fmt.Printf("\n")
+	for i:= 0; i < len(name); i++ {
+        fmt.Printf("%c ", name[i])
+	}
+	
 
 }

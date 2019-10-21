@@ -41,4 +41,8 @@ func main() {
 	fmt.Printf("map 的长度为：%d\n", len(countryCapitalMap))
 	countryCapitalMap["yaya"] = "le"
 	fmt.Printf("map 的长度为：%d\n", len(countryCapitalMap))
+
+	//通过键获取值
+	x,ok := countryCapitalMap["Tokyo"]
+	fmt.Println(x,ok)
 }

@@ -32,8 +32,8 @@ func main() {
 	for i := range dslice {
 		dslice[i]++
 	}
-	fmt.Println("array after: ", darr, "切片容量为：", cap(dslice), "切片长度为：", len(dslice))
+	fmt.Println("array after: ", darr, "切片容量为：", cap(darr), "切片长度为：", len(darr))
 	fmt.Println("old slice : ", dslice)
-	dslice = append(dslice, 23, 54, 56, 8888)
-	fmt.Println("new slice : ", dslice)
+	dslice = append(dslice, 23, 54, 56, 8888,7,87,99,678,50,29,66,109)
+	fmt.Println("new slice : ", dslice,"切片容量为：", cap(dslice), "切片长度为：", len(dslice))
 }
