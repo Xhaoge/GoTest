@@ -5,35 +5,35 @@ import "fmt"
 //数组 test 需要指明数组的大小和存储的数据类型
 
 func main() {
-	var balance [10] float32
-	fmt.Printf("balance = %.1f\n",balance)
-	var balanc = [5]float32{100.0,2.0,3.4,7.0,50.0}
-	fmt.Printf("balance1 = %.2f\n",balanc)
-	balanc[3]=2
-	fmt.Printf("balance2 = %.2f\n",balanc)
-	fmt.Printf("balance 的第三位是：%.2f\n",balanc[2])
+	var balance [10]float32
+	fmt.Printf("balance = %.1f\n", balance)
+	var balanc = [5]float32{100.0, 2.0, 3.4, 7.0, 50.0}
+	fmt.Printf("balance1 = %.2f\n", balanc)
+	balanc[3] = 2
+	fmt.Printf("balance2 = %.2f\n", balanc)
+	fmt.Printf("balance 的第三位是：%.2f\n", balanc[2])
 
 	var i int
 	//根据for下标遍历数组
-	for i=0;i<len(balanc);i++{
-		fmt.Printf("%d for balance: %.2f\n",i,balanc[i])
+	for i = 0; i < len(balanc); i++ {
+		fmt.Printf("%d for balance: %.2f\n", i, balanc[i])
 	}
 	//使用range 函数遍历数组值；
-	for _,v := range balanc{
-		fmt.Printf("依次打印数组中的值：%f",v)
+	for _, v := range balanc {
+		fmt.Printf("依次打印数组中的值：%f", v)
 	}
 	a := balanc
-	fmt.Println("\n",a)
+	fmt.Println("\n", a)
 
 	// 切片，slice;
 	darr := []int{57, 89, 90, 82, 100, 78, 67, 69, 59}
-	dslice :=darr[2:5]
-	fmt.Println("array before: ",darr)
-	for i := range dslice{
+	dslice := darr[2:5]
+	fmt.Println("array before: ", darr)
+	for i := range dslice {
 		dslice[i]++
 	}
-	fmt.Println("array after: ",darr,"切片容量为：",cap(dslice))
-	fmt.Println("old slice : ",dslice)
-	dslice = append(dslice,23,54,56,8888)
-	fmt.Println("new slice : ",dslice)
+	fmt.Println("array after: ", darr, "切片容量为：", cap(dslice), "切片长度为：", len(dslice))
+	fmt.Println("old slice : ", dslice)
+	dslice = append(dslice, 23, 54, 56, 8888)
+	fmt.Println("new slice : ", dslice)
 }
