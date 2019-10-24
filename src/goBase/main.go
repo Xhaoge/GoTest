@@ -1,12 +1,13 @@
 package main
 
-import "../goBase/ac/employee"
+import "goBase/ac"
 
 func main() {  
-    e := employee.Employee {
+    e := ac.Employee {
         FirstName: "Sam",
         LastName: "Adolf",
         TotalLeaves: 30,
         LeavesTaken: 20,
     }
-    e.LeavesR
+    e.LeavesRemaining()
+}
