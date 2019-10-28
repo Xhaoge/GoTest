@@ -64,6 +64,8 @@ func testAdd(i int) int {
 	return i+testAdd(i-1)
 }
 
+#todo 回调函数 函数的一个参数是函数类型；
+
 
 func main() {
 	defer fmt.Println("这是最后才执行的一个defer 吗？")
