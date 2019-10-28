@@ -46,6 +46,25 @@ func (p person) getName() {
 	fmt.Printf("\n%s %s\n", p.firstName, p.lastName)
 }
 
+//递归调用函数；
+func test(a int){
+	if a==1{
+		fmt.Println("终止函数")
+		return
+	}
+	test(a-1)
+	fmt.Println("a = ",a)
+}
+
+
+func testAdd(i int) int {
+	if i==1{
+		return 1
+	}
+	return i+testAdd(i-1)
+}
+
+
 func main() {
 	defer fmt.Println("这是最后才执行的一个defer 吗？")
 	fmt.Println("这个是函数test")
@@ -65,6 +84,9 @@ func main() {
 	for i:= 0; i < len(name); i++ {
         fmt.Printf("%c ", name[i])
 	}
-	
+
+	test(3)
+	z := testAdd(10)
+	fmt.Println("zz = ",z)
 
 }
