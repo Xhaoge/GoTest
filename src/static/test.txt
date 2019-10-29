@@ -1,6 +1,7 @@
 hello,world
 I will to be you!
 
+go 语言学习网：https://studygolang.com/pkgdoc
 
 vs code 
 Ctrl+Shift+P,F1 展示全局命令面板
