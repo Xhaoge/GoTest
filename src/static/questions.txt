@@ -7,3 +7,6 @@
         %v:结构体；      %T：值得类型type；         %t：格式化布尔值；
         %f：浮点数；     %s：字符串；               %p：输出一个指针的值；
         %6.6d：输出数的宽度和精度；
+
+// 3. golang The system cannot find the path specified.
+    找不到脚本中所传入的路径；
