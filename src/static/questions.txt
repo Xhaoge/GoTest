@@ -10,3 +10,9 @@
 
 // 3. golang The system cannot find the path specified.
     找不到脚本中所传入的路径；
+
+// 4.几种golang读写file操作的区别；
+    io
+    os
+    bufio  -- 添加缓存区，减少io对存储盘的读取次数；
+    ioutil -- 适合使用一次性读取文件，再一次性写入文件的方式，不适合大文件，容易溢出；
