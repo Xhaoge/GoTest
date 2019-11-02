@@ -26,15 +26,15 @@ func InitMysql() {
 	pwd := beego.AppConfig.String("mysqlpwd")
 	host := beego.AppConfig.String("host")
 	port := beego.AppConfig.String("port")
-	dbname := beego.AppConfig.String("daname")
+	dbname := beego.AppConfig.String("dbname")
 
 	//dbConn := "root:yu271400@tcp(127.0.0.1:3306)/cmsproject?charset=utf8"
 	dbConn := user + ":" + pwd + "@tcp(" + host + ":" + port + ")/" + dbname + "?charset=utf8"
-	err := orm.RegisterDataBase("default", driverName, dbConn)
-	if err != nil {
-		fmt.Println("register err")
-	}
-	fmt.Println("不知道 通过数据库了没")
+	fmt.Println(dbConn)
+	// err := orm.RegisterDataBase("default", driverName, dbConn)
+	// if err != nil {
+	// 	fmt.Println("register err")
+	// }
 	db1, _ := sql.Open(driverName, dbConn)
 	db = db1
 }
