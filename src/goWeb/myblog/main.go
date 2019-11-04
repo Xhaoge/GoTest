@@ -10,5 +10,6 @@ import (
 func main() {
 	beego.Info("this is my blog")
 	utils.InitMysql()
+	beego.BConfig.WebConfig.Session.SessionOn = true
 	beego.Run()
 }
