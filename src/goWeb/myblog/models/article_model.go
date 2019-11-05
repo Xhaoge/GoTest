@@ -1,34 +1,79 @@
 package models
 
-import "goWeb/myblog/utils"
+import (
+	"fmt"
+	"goWeb/myblog/utils"
 
-type Article struct{
-	Id	int
-	Title string
-	Tags string
-	Short string
-	Content string
-	Author string
+	"github.com/astaxie/beego"
+)
+
+type Article struct {
+	Id         int
+	Title      string
+	Tags       string
+	Short      string
+	Content    string
+	Author     string
 	Createtime int64
 }
 
 //--------------------数据处理-----------
-func AddArticle(article Article) (int64,error) {
-	i,err := insertArticle(article)
-	return i,err
+func AddArticle(article Article) (int64, error) {
+	i, err := insertArticle(article)
+	return i, err
 }
 
 //----------------------数据库操作--------------
 //插入一篇文章
-func insertArticle(Article Article)(int64,error){
+func insertArticle(article Article) (int64, error) {
 	return utils.ModifyDB("insert into article(title,tags,short,content,author,createtime) values(?,?,?,?,?,?)",
-		article.Title,article.Tags,article.Short,article.Content,article.Author,article.Createtime)
+		article.Title, article.Tags, article.Short, article.Content, article.Author, article.Createtime)
 }
 
 // 根据页码查询文章
-func FindArticleWithPage(page int)([]Article,error){
+func FindArticleWithPage(page int) ([]Article, error) {
 	//从配置文件中共获取每页的文章数量
-	num,_ := beego.AppConfig.Int("articleListPageNum")
+	num, _ := beego.AppConfig.Int("articleListPageNum")
 	page--
-	fmt.Println("-------------->page",page)
+	fmt.Println("-------------->page", page)
+	return QueryArticleWightPage(page, num)
+}
+
+/*
+分页查询数据库
+limit分页查询语句，
+	语法：limit m，n
+
+	m代表从多少位开始获取，与id值无关
+	n代表获取多少条数据
+
+注意limit前面咩有where
+*/
+
+func QueryArticleWightPage(page, num int) ([]Article, error) {
+	sql := fmt.Sprintf("limit %d,%d", page*num, num)
+	return QueryArticleWightCon(sql)
+}
+
+func QueryArticleWightCon(sql string) ([]Article, error) {
+	sql = "select id,title,tags,short,content,author,createtime from article " + sql
+	rows, err := utils.QueryDB(sql)
+	if err != nil {
+		return nil, err
+	}
+	var artList []Article
+	for rows.Next() {
+		id := 0
+		title := ""
+		tags := ""
+		short := ""
+		content := ""
+		author := ""
+		var createtime int64
+		createtime = 0
+		rows.Scan(&id, &title, &tags, &short, &content, &author, &createtime)
+		art := Article{id, title, tags, short, content, author, createtime}
+		artList = append(artList, art)
+	}
+	return artList, nil
 }

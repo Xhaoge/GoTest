@@ -1,4 +1,4 @@
-package utils
+~package utils
 
 import (
 	"database/sql"
@@ -68,4 +68,8 @@ func ModifyDB(sql string, args ...interface{}) (int64, error) {
 // 查询
 func QueryRowDB(sql string) *sql.Row {
 	return db.QueryRow(sql)
+}
+
+func QueryDB(sql string)(*sql.Rows,error){
+	return db.Query(sql)
 }
