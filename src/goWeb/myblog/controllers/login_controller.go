@@ -34,7 +34,3 @@ func (this *LoginController) Post() {
 	}
 	this.ServeJSON()
 }
-	}
-	this.ServeJSON()
-}
-

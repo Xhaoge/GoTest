@@ -1,13 +1,18 @@
-~package utils
+package utils
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
+	"html/template"
 	"log"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/russross/blackfriday"
+	"github.com/sourcegraph/syntaxhighlight"
 )
 
 var db *sql.DB
@@ -35,8 +40,17 @@ func InitMysql() {
 	// if err != nil {
 	// 	fmt.Println("register err")
 	// }
-	db1, _ := sql.Open(driverName, dbConn)
-	db = db1
+	db1, err := sql.Open(driverName, dbConn)
+	if err != nil {
+		fmt.Println("连接数据库报错：err=", err)
+	} else {
+		db = db1
+		//创建用户表
+		CreateTableWithUser()
+		//创建文章表
+		CreateTableWithArticle()
+	}
+
 }
 
 // 创建用户表
@@ -47,6 +61,20 @@ func CreateTableWithUser() {
 		password VARCHAR(64),
 		status INT(4),
 		createtime INT(10)
+		);`
+	ModifyDB(sql)
+}
+
+// 创建文章表
+func CreateTableWithArticle() {
+	sql := `create table if not exists article(
+		id int(4) primary key auto_increment not null,
+		title varchar(30),
+		author varchar(20),
+		tags varchar(30),
+		short varchar(255),
+		content longtext,
+		createtime int(10)
 		);`
 	ModifyDB(sql)
 }
@@ -70,6 +98,30 @@ func QueryRowDB(sql string) *sql.Row {
 	return db.QueryRow(sql)
 }
 
-func QueryDB(sql string)(*sql.Rows,error){
+func QueryDB(sql string) (*sql.Rows, error) {
 	return db.Query(sql)
+}
+
+/**
+ * 将文章详情的内容，转换成HTMl语句
+ */
+func SwitchTimeStampToData(content string) template.HTML {
+	markdown := blackfriday.MarkdownCommon([]byte(content))
+
+	// 获取到html文档
+	doc, _ := goquery.NewDocumentFromReader(bytes.NewReader(markdown))
+	/**
+	对document进程查询，选择器和css的语法一样
+	第一个参数：i是查询到的第几个元素
+	第二个参数：selection就是查询到的元素
+	*/
+	doc.Find("code").Each(func(i int, selection *goquery.Selection) {
+		light, _ := syntaxhighlight.AsHTML([]byte(selection.Text()))
+		selection.SetHtml(string(light))
+		fmt.Println(selection.Html())
+		fmt.Println("light:", string(light))
+		fmt.Println("\n\n\n")
+	})
+	htmlString, _ := doc.Html()
+	return template.HTML(htmlString)
 }

@@ -77,3 +77,21 @@ func QueryArticleWightCon(sql string) ([]Article, error) {
 	}
 	return artList, nil
 }
+//------翻页------
+//存储表的行数，只有自己可以更改，当文章新增或者删除时需要更新这个值
+var articleRowsNum = 0
+//只有首次获取行数的时候采取统计表里的行数
+func GetArticleRowsNum() int {
+	if articleRowsNum == 0{
+		articleRowsNum = QueryArticleRowNum()
+	}
+	return articleRowsNum
+}
+
+//查询文章的总条数
+func QueryArticleRowNum() int {
+	row := utils.QueryRowDB("select count(id) from article")
+	num := 0
+	row.Scan(&num)
+	return num
+}
