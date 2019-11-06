@@ -25,8 +25,10 @@ func QueryUserWightCon(con string) int {
 	sql := fmt.Sprintf("select id from users %s", con)
 	fmt.Println(sql)
 	row := utils.QueryRowDB(sql)
+	fmt.Println("row", row)
 	id := 0
-	row.Scan(&id)
+	fmt.Scan(&id)
+	fmt.Println("row2", *row)
 	return id
 }
 
