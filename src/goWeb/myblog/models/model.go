@@ -27,8 +27,9 @@ func QueryUserWightCon(con string) int {
 	row := utils.QueryRowDB(sql)
 	fmt.Println("row", row)
 	id := 0
-	fmt.Scan(&id)
-	fmt.Println("row2", *row)
+	row.Scan(&id)
+	fmt.Println("row2", &row)
+	fmt.Println("row2", id)
 	return id
 }
 
