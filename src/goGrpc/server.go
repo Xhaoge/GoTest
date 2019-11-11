@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 
@@ -20,7 +21,12 @@ type server struct {
 
 // sayhello implements helloworld.greeterserver
 func (s *server) SayHello(ctx context.Context, r *pb.HelloRequest) (*pb.HelloReply, error) {
+	printmyself()
 	return &pb.HelloReply{Message: "Hello " + r.Name}, nil
+}
+
+func printmyself() {
+	fmt.Println("这是个什么鬼.......")
 }
 
 func main() {
@@ -29,7 +35,7 @@ func main() {
 		log.Fatalf("failed to listen:%v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterGreetingServer(s, &server{})
 	// Register reflection service on grpc server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {

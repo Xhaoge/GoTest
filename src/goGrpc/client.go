@@ -12,6 +12,8 @@ import (
 const (
 	address     = "localhost:8089"
 	defaultName = "xhaoge"
+	defaultAge  = 24
+	defaultWork = "coder"
 )
 
 func main() {
@@ -28,7 +30,7 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name})
+	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name, Age: defaultAge, Work: defaultWork})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
