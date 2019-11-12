@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"goWeb/myblog/models"
+	//"goWeb/myblog/models"
 	"github.com/astaxie/beego"
 )
 
@@ -17,18 +17,42 @@ type HomeController struct {
 	BaseController
 }
 
+type HomeBlockParam struct{
+	Id 			int
+	Title 		string
+	Tags		[]TagLink
+	Short 		string
+	Content		string
+	Author		string
+	CreateTime	string
+	//查看文章的地址；
+	Link 		string
+
+	// 修改文章的地址；
+	Update 		string
+	DeleteLink 	string
+
+	//记录是否登陆；
+	IsLogin 	string
+}
+
+//标签连接；
+type TagLink struct{
+	TagName		string
+	TagUrl		string
+}
+
 func (this *HomeController) Get() {
-	fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
-	page,_ := this.GetInt("page")
-	if page <= 0{
-		page = 1
-	}
-	var artList []models.Article
-	artList, _ = models.FindArticleWithPage(page)
-	this.Data["PageCode"] = 1
-	this.Data["HasFooter"] = true
-	fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
-	this.Data["Content"] = models.MakeHomeBlocks(artList,this.IsLogin)
+	// page,_ := this.GetInt("page")
+	// if page <= 0{
+	// 	page = 1
+	// }
+	// var artList []models.Article
+	// artList, _ = models.FindArticleWithPage(page)
+	// this.Data["PageCode"] = 1
+	// this.Data["HasFooter"] = true
+	// fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
+	// this.Data["Content"] = models.MakeHomeBlocks(artList,this.IsLogin)
 	this.TplName = "home.html"
 }
 

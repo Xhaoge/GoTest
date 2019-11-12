@@ -125,4 +125,3 @@ func SwitchTimeStampToData(content string) template.HTML {
 	htmlString, _ := doc.Html()
 	return template.HTML(htmlString)
 }
-}

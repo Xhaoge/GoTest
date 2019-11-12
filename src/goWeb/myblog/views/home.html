@@ -13,7 +13,7 @@
 
 {{if .HasFooter}}
     <div id="home-footer">
-        <a {{if .PageCode.HasPre}}href="{{.PageCode.PreLink}}" {{else}} class="disable" {{end}}>上一页</a>
+        <a {{if .PageCode.HasFooter}}href="{{.PageCode.PreLink}}" {{else}} class="disable" {{end}}>上一页</a>
         <span>{{.PageCode.ShowPage}}页</span>
         <a {{if .PageCode.HasNext}}href="{{.PageCode.NextLink}}" {{else}} class="disable" {{end}}>下一页</a>
     </div>
