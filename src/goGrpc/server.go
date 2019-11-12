@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+	pb "goGrpc/helloworld"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -22,7 +22,8 @@ type server struct {
 // sayhello implements helloworld.greeterserver
 func (s *server) SayHello(ctx context.Context, r *pb.HelloRequest) (*pb.HelloReply, error) {
 	printmyself()
-	return &pb.HelloReply{Message: "Hello " + r.Name}, nil
+	rr = pb.HelloReply{Message: "Hello " + r.Name+"  i konw your work:"+r.Work}
+	return rr, nil
 }
 
 func printmyself() {

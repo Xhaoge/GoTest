@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+	pb "goGrpc/helloworld"
 )
 
 const (
@@ -23,14 +23,14 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
+	c := pb.NewGreetingClient(conn)
 
 	// Contact the server and print out its response.
 	name := defaultName
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name, Age: defaultAge, Work: defaultWork})
+	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name,Age:defaultAge,Work:defaultWork})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
