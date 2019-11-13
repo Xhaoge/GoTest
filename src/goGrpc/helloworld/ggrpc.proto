@@ -19,4 +19,6 @@ message HelloRequest{
 // the response message containing the greetings
 message HelloReply {
     string message = 1;
+    string work    = 2;
+    int64  age     = 3;
 }
