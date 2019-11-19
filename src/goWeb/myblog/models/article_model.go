@@ -20,6 +20,7 @@ type Article struct {
 //--------------------数据处理-----------
 func AddArticle(article Article) (int64, error) {
 	i, err := insertArticle(article)
+	SetArticleRowsNum()
 	return i, err
 }
 
@@ -95,3 +96,10 @@ func QueryArticleRowNum() int {
 	row.Scan(&num)
 	return num
 }
+
+//设置页数
+func SetArticleRowsNum(){
+	articleRowsNum = QueryArticleRowNum()
+}
+
+// 然后修改增加文章的方法；
