@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"fmt"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -30,9 +31,10 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
-	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name,Age:defaultAge,Work:defaultWork})
+	rr, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: name,Age:defaultAge,Work:defaultWork})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
-	log.Printf("Greeting: %s", r.Message)
+	fmt.Println(rr)
+	log.Println("Greeting: ", rr.Message,rr.Work,rr.Age)
 }

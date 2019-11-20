@@ -36,10 +36,11 @@ func (this *AddArticleController) Post() {
 	tags := this.GetString("tags")
 	short := this.GetString("shorts")
 	content := this.GetString("content")
+	author := this.GetString("author")
 	fmt.Printf("title:%s,tags:%s\n", title, tags)
 
 	// 实例化model，将他导入到数据库中；
-	art := models.Article{0, title, tags, short, content, "xhaoge叫你做人", time.Now().Unix()}
+	art := models.Article{0, title, tags, short, content, author, time.Now().Unix()}
 	_, err := models.AddArticle(art)
 
 	// 返回数据给浏览器
