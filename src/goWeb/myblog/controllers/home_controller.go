@@ -52,16 +52,37 @@ type HomeFooterPageCode struct {
 
 
 func (this *HomeController) Get() {
+	tag := this.GetString("tag")
+	fmt.Println("tags:",tag)
 	page,_ := this.GetInt("page")
 	if page <= 0{
 		page = 1
 	}
 	var artList []models.Article
-	artList, _ = models.FindArticleWithPage(page)
-	this.Data["PageCode"] = 1
-	this.Data["HasFooter"] = true
+	if len(tag) > 0 {
+		// 按照指定的标签搜索
+		artList, _ = models.QueryArticlesWithTag(tag)
+		this.Data["HasFooter"] = false
+	} else {
+		if page <= 0 {
+			page = 1
+		}
+		// 设置分页
+		artList, _ = models.FindArticleWithPage(page)
+		this.Data["PageCode"] = models.ConfigHomeFooterPageCode(page)
+		this.Data["HasNext"] = true
+	}
+
+	// artList, _ = models.FindArticleWithPage(page)
+	// this.Data["PageCode"] = 1
+	// this.Data["HasFooter"] = true
+	for a range artList{
+		fmt.Println(a.Content)
+	}
+	
 	fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
 	this.Data["Content"] = models.MakeHomeBlocks(artList,this.IsLogin)
+
 	this.TplName = "home.html"
 }
 
