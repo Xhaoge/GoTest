@@ -76,9 +76,7 @@ func (this *HomeController) Get() {
 	// artList, _ = models.FindArticleWithPage(page)
 	// this.Data["PageCode"] = 1
 	// this.Data["HasFooter"] = true
-	for a range artList{
-		fmt.Println(a.Content)
-	}
+	fmt.Println(artList)
 	
 	fmt.Println("IsLogin:", this.IsLogin, this.Loginuser)
 	this.Data["Content"] = models.MakeHomeBlocks(artList,this.IsLogin)
@@ -87,17 +85,17 @@ func (this *HomeController) Get() {
 }
 
 // 判断是否登录
-func (this *BaseController) Prepare() {
-	loginuser := this.GetSession("loginuser")
-	fmt.Println("loginuser---->", loginuser)
-	if loginuser != nil {
-		this.IsLogin = true
-		this.Loginuser = loginuser
-	} else {
-		this.IsLogin = false
-	}
-	this.Data["IsLogin"] = this.IsLogin
-}
+// func (this *BaseController) Prepare() {
+// 	loginuser := this.GetSession("loginuser")
+// 	fmt.Println("loginuser---->", loginuser)
+// 	if loginuser != nil {
+// 		this.IsLogin = true
+// 		this.Loginuser = loginuser
+// 	} else {
+// 		this.IsLogin = false
+// 	}
+// 	this.Data["IsLogin"] = this.IsLogin
+// }
 
 
 // // -------------翻页---------
