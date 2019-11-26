@@ -26,7 +26,11 @@ type AddArticleController struct {
 */
 
 func (this *AddArticleController) Get() {
-	this.TplName = "write_article.html"
+	//清除该用户登录状态的数据
+	this.DelSession("loginuser")
+
+	this.Redirect("/",302)
+	//this.TplName = "write_article.html"
 }
 
 // 通过this.serverjson 去返回字符串；
