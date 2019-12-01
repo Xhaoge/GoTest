@@ -49,6 +49,8 @@ func InitMysql() {
 		CreateTableWithUser()
 		//创建文章表
 		CreateTableWithArticle()
+		// 创建图片表
+		CreateTableWithAlbum()
 	}
 
 }
@@ -76,6 +78,18 @@ func CreateTableWithArticle() {
 		content longtext,
 		createtime int(10)
 		);`
+	ModifyDB(sql)
+}
+
+// 创建图片表
+func CreateTableWithAlbum(){
+	sql := `create table if not exists alabum(
+		id int(4) primary key auto_increment not null,
+		filepath varchar(255),
+		filrname varchar(64),
+		status int(4),
+		createtime int(10)
+	);`
 	ModifyDB(sql)
 }
 

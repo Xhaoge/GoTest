@@ -3,7 +3,8 @@ package models
 import (
 	"fmt"
 	"goWeb/myblog/utils"
-
+	"log"
+	"strconv"
 	"github.com/astaxie/beego"
 )
 
@@ -135,4 +136,49 @@ func QueryArticlesWithTag(tag string) ([]Article, error) {
 	// web&%
 	// web
 	return QueryArticlesWithCon(sql)
+}
+
+func UpdateArticle (art Article)(int64,error){
+	//数据路操作；
+	return utils.ModifyDB("update article set title=?,tags=?,short=?,content=?,where id=?",art.Title,art.Tags,art.Short,art.Content,art.Id)
+}
+
+
+func QueryArticleWithId(id int) Article{
+	row := utils.QueryRowDB("select id,title,tags,short,content,author,createtime from article where id=" + strconv.Itoa(id))
+	title := ""
+	tags := ""
+	short := ""
+	content := ""
+	author := ""
+	var createtime int64
+	createtime = 0
+	row.Scan(&id, &title, &tags, &short, &content, &author, &createtime)
+	art := Article{id, title, tags, short, content, author, createtime}
+	return art
+}
+
+func DeleteArticle(artId int) (int64,error){
+	i,err := deleteArticleWithId(artId)
+	SetArticleRowsNum()
+	return i,err
+}
+
+func deleteArticleWithId(artId int) (int64,error) {
+	return utils.ModifyDB("delete from article where id=?",artId)
+}
+
+//查询标签，返回一个字段的列表；
+func QueryArticleWithParam(param string) []string {
+	rows, err := utils.QueryDB(fmt.Sprintf("select %s from article",param))
+	if err != nil {
+		log.Println(err)
+	}
+	var paramList []string
+	for rows.Next() {
+		arg := ""
+		rows.Scan(&arg)
+		paramList = append(paramList,arg)
+	}
+	return paramList
 }

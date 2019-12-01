@@ -20,6 +20,10 @@ type AddArticleController struct {
 	BaseController
 }
 
+type AboutMeController struct {
+	BaseController
+}
+
 /*
 当访问/add 路径的时候触发AddArticleController的Get方法，
 相应的页面时通过TpName
@@ -59,4 +63,12 @@ func (this *AddArticleController) Post() {
 	this.Data["json"] = response
 	this.ServeJSON()
 
+}
+
+
+func (this *AboutMeController) Get(){
+	this.Data["wechat"] = "微信: xcxxxxxx"
+	this.Data["qq"] = "qq: xxxxxxxx"
+	this.Data["tel"] = "tel: sssssss"
+	this.TplName = "aboutme.html"
 }
