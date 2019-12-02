@@ -25,8 +25,15 @@ func main (){
 	fmt.Println("Body type:",reflect.TypeOf(Body))
 
 	// Post 请求
-	body := "{\"action\":20}"
-	res,err := http.Post("http://xxx.com","application/json;charset=utf-8",bytes.NewBuffer([]byte(body)))
+	body := `{
+		    "originalCode":"USD",
+			"targetCode":"CNY",
+			"publish_timestamp": "2019-11-28T00:00:00Z"}`
+	fmt.Println("body type:",reflect.TypeOf(body))
+
+	urlPost := "http://test-restful-api.gloryholiday.com/currencyservice/getCurrency"
+	res,err := http.Post(urlPost,"application/json;charset=utf-8",bytes.NewBuffer([]byte(body)))
+	fmt.Println("res.Body:",res.Body)
 	if err != nil {
 		fmt.Println("ERR:",err.Error())
 	}
@@ -36,4 +43,5 @@ func main (){
 		fmt.Println("err2 ",err.Error())
 	}
 	fmt.Println(string(content))
+	fmt.Println("content type:",reflect.TypeOf(content))
 }	
