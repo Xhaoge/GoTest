@@ -10,6 +10,11 @@ func printM(cc map[string]string) {
 	}
 }
 
+type c struct{
+	A int
+	B string
+}
+
 func main() {
 	fmt.Println("map 学习；")
 	// 申名变量；
@@ -45,4 +50,10 @@ func main() {
 	//通过键获取值
 	x,ok := countryCapitalMap["Tokyo"]
 	fmt.Println(x,ok)
+
+	mp := make(map[c]int)
+	key := c{A:1,B:"zbc"}
+	mp[key] = 9
+	fmt.Println(mp[c{A:1,B:"zbc"}])
+	fmt.Printf("%+v",mp)
 }
