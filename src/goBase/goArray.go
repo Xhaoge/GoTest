@@ -4,6 +4,10 @@ import "fmt"
 
 //数组 test 需要指明数组的大小和存储的数据类型
 
+type nnn struct {
+	Name string
+}
+
 func main() {
 	var balance [10]float32
 	fmt.Printf("balance = %.1f\n", balance)
@@ -36,4 +40,11 @@ func main() {
 	fmt.Println("old slice : ", dslice)
 	dslice = append(dslice, 23, 54, 56, 8888,7,87,99,678,50,29,66,109)
 	fmt.Println("new slice : ", dslice,"切片容量为：", cap(dslice), "切片长度为：", len(dslice))
+
+	var arrS []interface{}
+	var v nnn
+	v.Name = "xhaoge"
+	arrS = append(arrS,v)
+	arrS[0] = v
+	fmt.Println("arrS:",arrS)
 }
