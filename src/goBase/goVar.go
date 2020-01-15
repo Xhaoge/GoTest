@@ -62,7 +62,7 @@ func main(){
 		// ff.Call(methodlist)
 		var methodlist  []reflect.Value
 		var ff reflect.Value
-		ff = getValue.MethodByName("Test")
+		ff = getValue.MethodByName("Run")
 		if !ff.IsValid() {
 		// 如果结构体不存在此方法，输出Panic
 			fmt.Println("结构体不存在此方法，输出Panic")
