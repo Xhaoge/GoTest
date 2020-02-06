@@ -55,5 +55,18 @@ func main() {
 	key := c{A:1,B:"zbc"}
 	mp[key] = 9
 	fmt.Println(mp[c{A:1,B:"zbc"}])
-	fmt.Printf("%+v",mp)
+	fmt.Printf("%+v\n",mp)
+	testList := []string{"string1","string3","string4","string4"}
+	testList = append(testList,"string2")
+	_ = TestStringList(testList)
+}
+
+
+func TestStringList(strList []string) map[string]int {
+	var resMap  = make(map[string]int)
+	for _,value := range strList {
+		resMap[value] = resMap[value] +1
+	}
+	fmt.Println("resMap:",resMap)
+	return resMap
 }
