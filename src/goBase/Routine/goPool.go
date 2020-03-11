@@ -66,7 +66,12 @@ func (p *Pool) Run() {
 }
 
 func printMyName() error {
-	fmt.Println("my name is xxxx")
+	fmt.Println("my name is xhaoge")
+	return nil
+}
+
+func CountAAndB() error {
+	fmt.Println("1 + 2 = 3")
 	return nil
 }
 
@@ -75,6 +80,7 @@ func main() {
 	// 创建一个task
 	t := NewTask(func() error {
 		fmt.Println(time.Now())
+		time.Sleep(time.Second)
 		return nil
 	})
 
@@ -82,8 +88,10 @@ func main() {
 
 	// 创建一个协程池，最大开启四个worker
 	p := NewPool(4)
-	go p.ExternalInter <- printTask
 
+	go func() {
+		p.ExternalInter <- printTask
+	}()
 	//开一个协程，不断的向pool 输送打印一条时间的task任务；
 	go func() {
 		for {
@@ -91,6 +99,10 @@ func main() {
 		}
 	}()
 
+	go func() {
+		t := NewTask(CountAAndB)
+		p.ExternalInter <- t
+	}()
 	// 启动协程池
 	p.Run()
 
