@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"sh"
+	"sh/one"
 )
 
 func main()  {
 	fmt.Println("hello world......")
-	sh.Say("niubi...")
+	one.Say("niubi...")
 }
