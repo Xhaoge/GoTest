@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"sh/one"
+	"sh/myhttp"
 )
 
 func main()  {
 	fmt.Println("hello world......")
-	one.Say("niubi...")
+	pkgNumber := myhttp.GetRandomStr(4)
+	fmt.Print("pkgNumber: ",pkgNumber)
 }

@@ -1,6 +1,55 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "mKall8xfKBPL/a5Ji//i968rLsY=",
+			"path": "github.com/gin-contrib/sse",
+			"revision": "43f0f29dbd2b3f0feeebff91fd9cda22db296938",
+			"revisionTime": "2019-09-05T05:13:34Z"
+		},
+		{
+			"checksumSHA1": "olXiI/+UWsqzCTlSb8Ten2vTD2k=",
+			"path": "github.com/gin-gonic/gin",
+			"revision": "5f56109bcffd58e851dd186282d8fbd4d0decc82",
+			"revisionTime": "2020-02-21T09:15:17Z"
+		},
+		{
+			"checksumSHA1": "KDq0NvVT/8asRBfhL/R/0fyYd48=",
+			"path": "github.com/gin-gonic/gin/binding",
+			"revision": "5f56109bcffd58e851dd186282d8fbd4d0decc82",
+			"revisionTime": "2020-02-21T09:15:17Z"
+		},
+		{
+			"checksumSHA1": "qg53v7Qn4pAir0LvAjflsAkDb9Y=",
+			"path": "github.com/gin-gonic/gin/internal/bytesconv",
+			"revision": "5f56109bcffd58e851dd186282d8fbd4d0decc82",
+			"revisionTime": "2020-02-21T09:15:17Z"
+		},
+		{
+			"checksumSHA1": "GAHho8qMLbDfGoD4w7SX7ZRT56U=",
+			"path": "github.com/gin-gonic/gin/internal/json",
+			"revision": "5f56109bcffd58e851dd186282d8fbd4d0decc82",
+			"revisionTime": "2020-02-21T09:15:17Z"
+		},
+		{
+			"checksumSHA1": "qKy61c0uwl5rSpuOmNNImsx+b84=",
+			"path": "github.com/gin-gonic/gin/render",
+			"revision": "5f56109bcffd58e851dd186282d8fbd4d0decc82",
+			"revisionTime": "2020-02-21T09:15:17Z"
+		},
+		{
+			"checksumSHA1": "Tet0S+rvMIUeDsIIRHmtOwJfo4A=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "cb30d6282491c185f77d9bec5d25de1bb61a06bc",
+			"revisionTime": "2020-01-28T10:39:42Z"
+		},
+		{
+			"checksumSHA1": "CUYWsuZXfWmj4+lYK/QmxkAsDGM=",
+			"path": "sh/myhttp",
+			"revision": "485b5c7f5e51ee80d29e1321bbe57541906a4d9b",
+			"revisionTime": "2020-04-07T15:37:03Z"
+		}
+	],
 	"rootPath": "GoTest"
 }
