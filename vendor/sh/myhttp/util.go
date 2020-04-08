@@ -24,7 +24,3 @@ func MakePackageNumber() string {
 	return GetRandomStr(9)
 }
 
-// 返回time 时间格式方便保存入库
-func GetTime() {
-
-}

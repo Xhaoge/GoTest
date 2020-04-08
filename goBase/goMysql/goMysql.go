@@ -31,7 +31,7 @@ func QueryOne(db *sql.DB) {
 	user := new(User)
 	row := db.QueryRow("select * from users where id=?", 1)
 	// row.scan中的字段必须是按照数据库存入字段的顺序，否则报错；
-	if err = row.Scan(&user.Id, &user.Username, &user.Password, &user.Status, &user.Createtime); err != nil {
+	if err := row.Scan(&user.Id, &user.Username, &user.Password, &user.Status, &user.Createtime); err != nil {
 		fmt.Printf("scan failed,err:%v", err)
 		return
 	}
