@@ -76,9 +76,6 @@ fi
 (! grep 'func Test[^(]' *_test.go)
 (! grep 'func Test[^(]' test/*.go)
 
-# - Do not import x/net/context.
-(! git grep -l 'x/net/context' -- "*.go")
-
 # - Do not import math/rand for real library code.  Use internal/grpcrand for
 #   thread safety.
 git grep -l '"math/rand"' -- "*.go" 2>&1 | (! grep -v '^examples\|^stress\|grpcrand\|wrr_test')
@@ -115,7 +112,6 @@ fi
 staticcheck -go 1.9 -checks 'inherit,-ST1015' -ignore '
 google.golang.org/grpc/balancer.go:SA1019
 google.golang.org/grpc/balancer/grpclb/grpclb_remote_balancer.go:SA1019
-google.golang.org/grpc/balancer/grpclb/grpclb_test.go:SA1019
 google.golang.org/grpc/balancer/roundrobin/roundrobin_test.go:SA1019
 google.golang.org/grpc/xds/internal/balancer/edsbalancer/balancergroup.go:SA1019
 google.golang.org/grpc/xds/internal/resolver/xds_resolver.go:SA1019
@@ -132,7 +128,7 @@ google.golang.org/grpc/examples/features/debugging/client/main.go:SA1019
 google.golang.org/grpc/examples/features/load_balancing/client/main.go:SA1019
 google.golang.org/grpc/internal/transport/handler_server.go:SA1019
 google.golang.org/grpc/internal/transport/handler_server_test.go:SA1019
-google.golang.org/grpc/internal/resolver/dns/dns_resolver.go:SA1019
+google.golang.org/grpc/resolver/dns/dns_resolver.go:SA1019
 google.golang.org/grpc/stats/stats_test.go:SA1019
 google.golang.org/grpc/test/balancer_test.go:SA1019
 google.golang.org/grpc/test/channelz_test.go:SA1019

@@ -28,9 +28,9 @@ import (
 )
 
 var (
-	// WithResolverBuilder is set by dialoptions.go
+	// WithResolverBuilder is exported by dialoptions.go
 	WithResolverBuilder interface{} // func (resolver.Builder) grpc.DialOption
-	// WithHealthCheckFunc is set by dialoptions.go
+	// WithHealthCheckFunc is not exported by dialoptions.go
 	WithHealthCheckFunc interface{} // func (HealthChecker) DialOption
 	// HealthCheckFunc is used to provide client-side LB channel health checking
 	HealthCheckFunc HealthChecker

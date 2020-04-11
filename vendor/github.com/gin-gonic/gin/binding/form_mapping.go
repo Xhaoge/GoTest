@@ -12,11 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gin-gonic/gin/internal/bytesconv"
 	"github.com/gin-gonic/gin/internal/json"
 )
 
-var errUnknownType = errors.New("unknown type")
+var errUnknownType = errors.New("Unknown type")
 
 func mapUri(ptr interface{}, m map[string][]string) error {
 	return mapFormByTag(ptr, m, "uri")
@@ -52,10 +51,6 @@ func mappingByPtr(ptr interface{}, setter setter, tag string) error {
 }
 
 func mapping(value reflect.Value, field reflect.StructField, setter setter, tag string) (bool, error) {
-	if field.Tag.Get(tag) == "-" { // just ignoring this field
-		return false, nil
-	}
-
 	var vKind = value.Kind()
 
 	if vKind == reflect.Ptr {
@@ -117,6 +112,9 @@ func tryToSetValue(value reflect.Value, field reflect.StructField, setter setter
 	tagValue = field.Tag.Get(tag)
 	tagValue, opts := head(tagValue, ",")
 
+	if tagValue == "-" { // just ignoring this field
+		return false, nil
+	}
 	if tagValue == "" { // default value is FieldName
 		tagValue = field.Name
 	}
@@ -209,9 +207,9 @@ func setWithProperType(val string, value reflect.Value, field reflect.StructFiel
 		case time.Time:
 			return setTimeField(val, field, value)
 		}
-		return json.Unmarshal(bytesconv.StringToBytes(val), value.Addr().Interface())
+		return json.Unmarshal([]byte(val), value.Addr().Interface())
 	case reflect.Map:
-		return json.Unmarshal(bytesconv.StringToBytes(val), value.Addr().Interface())
+		return json.Unmarshal([]byte(val), value.Addr().Interface())
 	default:
 		return errUnknownType
 	}
