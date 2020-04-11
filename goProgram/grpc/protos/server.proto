@@ -1,0 +1,275 @@
+syntax = "proto3";
+
+package xhaoge.luffy.grpc
+
+
+message SimpleRequest {
+    string cid = 1; // platform 平台
+    string trace_id = 2; //追踪id
+}
+
+message SimpleResponse {
+    int32   status = 1;  // 响应状态码
+    string  msg = 2;    // 信息
+ }
+
+message Trip {
+    string  departure_code = 1;  // 出发城市
+    string  arrival_code = 2;    // 到达城市
+    string departure_date = 3; //起飞时间
+}
+
+message CabinClass {
+    // 默认所有
+    A = 0; // 所有
+    F = 1; // 头等
+    B = 2; // 商务
+    E = 3; // 经济
+    P = 4; // 超经
+}
+
+message YuetuSearchRequest {
+    SimpleRequest base_request = 1;
+    Trip    trip = 2;
+    CabinClass cabin = 3;
+    int32 adult_num = 4;
+    int32 child_num = 5;
+    int32 infant_num = 6;
+    bool bypass_cache = 7; // 是否拿取缓存
+    bool god_perspective = 19; // 上帝视角 强行走通搜索，各项拦截入span内
+    repeated string target_providers = 21; 比价工具参数，真实平台无此参数；
+}
+
+message YuetuSearchResponse {
+    SimpleResponse base_response = 1;
+    repeated Routing routing = 2;
+    repeated TraceSpan trace_spans = 3;
+}
+
+message Routing {
+    string data = 1;
+    repeated Itinerary itinerary = 2;
+    double adult_price = 3;
+    double adult_tax = 4;
+    double child_price = 5;
+    double child_tax = 6;
+    double infant_price = 7;
+    double infant_tax = 8;
+    int32 adult_tax_type = 9; // 0, 未含税； 1，已含税
+    int32 child_tax_type = 10; // 0, 未含税； 1，已含税
+    int32 infant_tax_type = 11; // 0, 未含税； 1，已含税
+    int32 price_type = 12; // 0, 普通价； 1，留学生价 /3-劳工 /4-新移民 /5-海员/6-老人/7-青年
+    int32 apply_type = 13; // 0, 预订价； 1，申请价;
+    string currency = 14; //币种
+    FareType fare_type = 15;
+    string validating_carrier = 16; //开票航司
+    int32 seats = 17; //剩余座位数(Segments 取最小)
+    string fare_basis = 18; //暂无返回
+    string child_fare_basis = 19; //暂无返回
+    bool multi_ticket = 20; //暂无
+    double adult_yr_tax = 21;
+    double adult_yq_tax = 22;
+    double adult_uo_tax = 23;
+    double child_yr_tax = 24;
+    double child_yq_tax = 25;
+    double child_uo_tax = 26;
+    string eligibility = 27; //旅客资质,暂无 ;
+    int32 ticket_time_limit_minutes = 28; //分钟为单位,出票速度  暂无;
+    int32 national_type = 29; // 乘客国籍类型：0代表全部 1代表适用 2代表不适用 暂无;
+    string nationality = 30; //  乘客国籍：输入国家二字码，多个用逗号分隔，最多支持5个国家  暂无;
+    string suit_age = 31; //  乘客年龄，可不输入代表不限制；可输入格式如：2~60，表示该价格只适用于2至60的乘客，仅支持正整数，仅支持一个年龄段  暂无;
+    int32 ticket_invoice_type = 32; // 报销凭证类型：0行程单/ 1 发票 / 2 电子发票 暂时没有这个配置哦，先放着  / 3 境外电子凭证
+    // Rule rule = 33;
+    string adult_type = 34; // 成人类型 例如ADT,JCB
+    string child_type = 35; // 儿童类型 例如CNN,JNN
+    string infant_type = 36;
+    string routing_id = 37; // Mondee (FlightItinerary.ItineraryID), Mystifly(FareSourceCode)
+    CabinClass cabin = 38; // Mondee (FlightItinerary.CabinClass)
+    string account_code = 39; // Sabre account code
+    string fare_calc_line = 40; // sabre fare calc line
+
+    /*qunar-snail-params*/
+    string tof = 41; //燃油   AdultPriceyes
+    string arf = 42; //机建   yes
+    string ctof = 43; //儿童燃油   yes
+    double view_price = 44; //票面价
+    double ticket_price = 45; //票面价
+    double child_ticket_price = 46; //票面价
+    string adu_tag = 47; // 成人，升单的时候放入productTag字段中
+    string chi_tag = 48; // 儿童tag
+
+    ProviderType provider_type = 49;
+
+    string flight_code = 50; // 航班详细代码，用于报价搜索
+
+    double ori_adult_price = 51; //上游原始报价
+    double ori_adult_tax = 52;
+    double ori_child_price = 53;
+    double ori_child_tax = 54;
+    double ori_infant_price = 55;
+    double ori_infant_tax = 56;
+
+    string pos_location = 57; //销售地 取值供应商配置中的pos_country 销售所在国家二字码
+    bool itinerary_splicing = 58; // 是否允许航程和航程之间的拼接
+
+    repeated CurrencyConversion currency_conversions = 59; // record of price convert to master currency
+    string master_currency = 60;
+    string provider_currency = 61;
+    string provider_name = 62; // 供应商
+    // repeated PriceChangesByPolicy policy_price_changes = 63;
+    repeated TraceSpan trace_spans = 64;
+    repeated EvictionMark eviction_marks = 65;
+
+    /* skypicker */
+    string booking_token = 66;
+
+    /* 提供给平台的公布价 原始价, 转到平台币种 */
+    double adult_publish_price = 67;
+    double adult_publish_tax = 68;
+    double child_publish_price = 69;
+    double child_publish_tax = 70;
+    double infant_publish_price = 71;
+    double infant_publish_tax = 72;
+
+    int32 valid_segments_count = 73;
+    int32 ticket_source = 74; // avia 使用
+    bool sale_baggage = 75; // 是否可售卖行李 行李增值服务
+    bool online_check_in = 76; // 是否在线值机
+    AIPolicyChangeInfo ai_policy_change_info = 77;
+
+    /* unififi*/
+    string payload = 78; // 必要数据字符串，调用方需要在后续的接口请求中作为参 数传入，其取值取自前序接口的返回
+    string routing_type = 79; // 航程类型 'ow'：单程 'rt'：往返 'mr'：多段
+
+    /* sabre跨天出票专用字段 */
+    bool next_day_purchase = 80; // 是否跨天次日存价
+    string purchase_date = 81; // 跨天次日存价日期 例如:2019-09-24
+    string earliest_tkt_time = 82; // 跨天次日存价 最早出票时间 例如:2019-09-24 13:03:00
+
+    // google.protobuf.Timestamp birth_time = 83; // 这个 routing 的生成时间
+    string provider_pcc = 84; // sabre provider pcc
+    string search_response_time = 85; // 搜索返回时间 格式yyyy-MM-dd HH:mm:ss
+    string actual_provider = 86; // 搜索 验价等步骤实际的返回供应商
+    string provider_location = 87; //供应商所在地 取值供应商配置中 location 所在地
+}
+
+message Itinerary {
+    string origin_city = 1; //出发城市   //T
+    string destination_city = 2; //返回城市    //T
+    repeated Segment segment = 3;
+    int32 duration = 4; //所有航程(含停留)耗时  暂时无
+    bool segment_splicing = 5; // 是否单个航程内的拼接
+}
+
+message Segment {
+    string carrier = 1; //销售         //T
+    string flight_number = 2; // T
+    string operating_carrier = 3; //承运   //T
+    string operating_flight_number = 4;
+    bool code_share = 5; //是否为共享航班
+    string departure_airport = 6; //T
+    string departure_time = 7; //T  yyyyMMddHHmm
+    string arrival_airport = 8; //T
+    string arrival_time = 9; //T  yyyyMMddHHmm
+    int32 duration = 10; //单段耗时
+    CabinClass cabin = 11; //舱等
+    string booking_class = 12; //小的舱位
+    string aircraft_code = 13; //机型  //T
+    string fare_basis = 14;
+    string child_fare_basis = 15;
+    FareType fare_type = 16;
+    repeated StopCity stop_city = 17; //经停城市
+    int32 seats = 18; //剩余座位数
+    string departure_terminal = 19; //出发航站楼
+    string arrival_terminal = 20; //到达航站楼
+    Baggage baggage = 21;
+    string status = 22; // 航段状态 例如HK,UN
+    string marriage_grp = 23; // sabre
+    string account_code = 24; // sabre
+
+    //qunar snail param
+    int32 stop_info = 25; //经停数
+    string child_cabin = 49; //儿童舱位，当此字段返回为null时，生单时此字段必传Y;
+
+    //travelport param
+    string availability_source = 26;
+    bool connection = 27;
+    string key = 28;
+    int32 fly_time = 29;
+    string departure_time_with_offset = 30;
+    string arrival_time_with_offset = 31;
+
+    bool main_segment = 32; //是否主航段 night-king赋值
+
+    // skypicker param
+    string id = 33;
+}
+
+message Baggage {
+    int32 free_baggage_piece = 1; //1      3         2     0
+    double free_baggage_weight = 2; // 0    0         25     25
+    bool baggage_check = 4; // 是否重新检查行李
+}
+
+message FareType {
+    PRIVATE = 0;
+    PUBLISHED = 1;
+}
+
+message Rule {
+    string  refund = 1;
+}
+
+message ProviderType {
+    PROVIDER_API = 0;
+    PROVIDER_SABRE_1B = 1;
+    PROVIDER_SABRE_1S = 2;
+    PROVIDER_AMADEUS_1A = 3;
+    PROVIDER_TRAVELPORT_1P = 4;
+    PROVIDER_TRAVELPORT_1G = 5;
+    PROVIDER_ETERM = 6;
+    PROVIDER_OTHER = 7;
+}
+
+message CurrencyConversion {
+    string from = 1;
+    string to = 2;
+    double rate = 3;
+    string source = 4;
+    // google.protobuf.Timestamp timestamp = 5;
+    string policy_id = 6;
+}
+
+message PriceChangesByPolicy {
+    string policyid = 1;
+}
+
+message EvictionMark {
+    string eviction_reason = 1;
+    repeated TraceSpan trace_spans = 2;
+}
+
+
+message TraceSpan {
+    /*
+    * 该消息体用来保存各种需要trace的处理记录，例如在搜索时需要记录匹配上的黑白名单、以及应用过的各种政策
+    */
+    string span_id = 1; // 匹配上的实体的ID，如果该Span记录的是一次政策，这该字段对应政策ID；同理，如果记录的是一次黑白名单，则对应的是黑白名单的ID
+    enum TraceType {
+        None = 0;
+        WB = 1;
+        POLICY = 2;
+        OTHERS = 3;
+    }
+    TraceType trace_type = 2;
+    string application = 3;
+    string desc = 4;
+    map<string, string> tags = 16; // 用来存放额外的信息
+    // google.protobuf.Timestamp created_at = 17;
+}
+
+message AIPolicyChangeInfo {
+    double adult_adjust_amount = 1; //自动调价金额
+    string adult_adjust_currency = 2; //自动调价币种
+    string policy_number = 3; //政策编号
+}

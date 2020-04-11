@@ -9,6 +9,12 @@
 			"revisionTime": "2019-10-15T22:09:08Z"
 		},
 		{
+			"checksumSHA1": "87myKyke3iPY+OpmiaQ+03WHaa0=",
+			"path": "github.com/Xhaoge/sh/myhttp",
+			"revision": "6a37a40645a4db8e2076c6aaa213c8758c948e06",
+			"revisionTime": "2020-04-11T03:26:03Z"
+		},
+		{
 			"checksumSHA1": "wb12TR7V+f+vAopqs40buI5xG5o=",
 			"path": "github.com/andybalholm/cascadia",
 			"revision": "dfaf055653582269348d1be90b2ce92eea162569",
@@ -343,12 +349,6 @@
 			"path": "github.com/ugorji/go/codec",
 			"revision": "42bc974514ff101a54c6b72a0e4dee29d96c0b26",
 			"revisionTime": "2019-08-12T10:43:08Z"
-		},
-		{
-			"checksumSHA1": "/JpiMnBolu0cM9fDfnT2PBbxd/4=",
-			"path": "github.com/xiaohaogge/sh/myhttp",
-			"revision": "6a37a40645a4db8e2076c6aaa213c8758c948e06",
-			"revisionTime": "2020-04-11T03:26:03Z"
 		},
 		{
 			"checksumSHA1": "J43LAg1rYN1mK/HbXc06EJQ6VbM=",
