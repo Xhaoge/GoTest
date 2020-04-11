@@ -1,6 +1,12 @@
 syntax = "proto3";
 
-package xhaoge.luffy.grpc
+package protos;
+
+
+service SHService {
+    rpc search (YuetuSearchRequest) returns (YuetuSearchResponse) {
+        };
+    }
 
 
 message SimpleRequest {
@@ -19,7 +25,7 @@ message Trip {
     string departure_date = 3; //起飞时间
 }
 
-message CabinClass {
+enum CabinClass {
     // 默认所有
     A = 0; // 所有
     F = 1; // 头等
@@ -36,8 +42,8 @@ message YuetuSearchRequest {
     int32 child_num = 5;
     int32 infant_num = 6;
     bool bypass_cache = 7; // 是否拿取缓存
-    bool god_perspective = 19; // 上帝视角 强行走通搜索，各项拦截入span内
-    repeated string target_providers = 21; 比价工具参数，真实平台无此参数；
+    bool god_perspective = 8; // 上帝视角 强行走通搜索，各项拦截入span内
+    repeated string target_providers = 9; //比价工具参数，真实平台无此参数
 }
 
 message YuetuSearchResponse {
@@ -146,7 +152,7 @@ message Routing {
     string purchase_date = 81; // 跨天次日存价日期 例如:2019-09-24
     string earliest_tkt_time = 82; // 跨天次日存价 最早出票时间 例如:2019-09-24 13:03:00
 
-    // google.protobuf.Timestamp birth_time = 83; // 这个 routing 的生成时间
+    // google.protobuf.Timestamp birth_time = 83;  这个 routing 的生成时间
     string provider_pcc = 84; // sabre provider pcc
     string search_response_time = 85; // 搜索返回时间 格式yyyy-MM-dd HH:mm:ss
     string actual_provider = 86; // 搜索 验价等步骤实际的返回供应商
@@ -205,13 +211,21 @@ message Segment {
     string id = 33;
 }
 
+message StopCity {
+    string code = 1; //城市三字码
+    string arrival_time = 2; //到达时间
+    string departure_time = 3; //出发时间
+    int32 duration = 4; //停留时长
+    string airport_code = 5; // 停留机场三字码
+}
+
 message Baggage {
     int32 free_baggage_piece = 1; //1      3         2     0
     double free_baggage_weight = 2; // 0    0         25     25
     bool baggage_check = 4; // 是否重新检查行李
 }
 
-message FareType {
+enum FareType {
     PRIVATE = 0;
     PUBLISHED = 1;
 }
@@ -220,7 +234,7 @@ message Rule {
     string  refund = 1;
 }
 
-message ProviderType {
+enum ProviderType {
     PROVIDER_API = 0;
     PROVIDER_SABRE_1B = 1;
     PROVIDER_SABRE_1S = 2;
