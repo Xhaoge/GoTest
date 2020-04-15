@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "./goProgram/grpc-proto/protos"
+	pb "godie/goProgram/grpc-proto/protos"
 	"log"
 	"net"
 
