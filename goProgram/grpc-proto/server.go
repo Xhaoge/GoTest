@@ -27,6 +27,7 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 		"Cid":r.BaseRequest.Cid,
 		"FromCity":r.Trip.DepartureCode,
 		"ToCity":r.Trip.ArrivalCode,
+		"Cabin":string(r.Cabin),
 		"FromDate":"20200627",
 		"TripType":"1",
 	}
