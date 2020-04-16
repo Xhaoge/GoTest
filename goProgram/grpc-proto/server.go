@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "goTest/goProgram/grpc-proto/protos"
+	pb "godie/goProgram/grpc-proto/protos"
 	"log"
 	"net"
 
@@ -18,15 +18,33 @@ const (
 
 type SearchService struct{}
 
-func buildYuetuReq(r *pb.YuetuSearchRequest) {
+func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 	myReq := myhttp.NewHttpSend(YUETUURL)
-	fmt.Println("YuetuUrl: ", YUETUURL)
+	fmt.Println("YuetuUrl: ", YUETUURL,":",PORT)
 	fmt.Println("myReq: ", myReq)
 	fmt.Println("YuetuSearchRequest: ", r)
+	req := map[string]string{
+		"Cid":r.BaseRequest.Cid,
+		"FromCity":r.Trip.DepartureCode,
+		"ToCity":r.Trip.ArrivalCode,
+		"FromDate":"20200627",
+		"TripType":"1",
+	}
+	myReq.SetSendType("json")
+	myReq.SetBody(req)
+	fmt.Println("%v: ",myReq)
+	res,err := myReq.Post()
+	if err != nil {
+		fmt.Println(err)
+		return nil,err
+	}
+	return res,nil
 }
 
 func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*pb.YuetuSearchResponse, error) {
-	buildYuetuReq(r)
+	res ,err := buildYuetuReq(r)
+	fmt.Println("res err: ",err)
+	fmt.Println("res:  ",string(res))
 	return &pb.YuetuSearchResponse{}, nil
 }
 

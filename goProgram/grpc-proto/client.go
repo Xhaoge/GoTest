@@ -21,12 +21,12 @@ func main() {
 	client := pb.NewSHServiceClient(conn)
 	resp, err := client.Search(context.Background(), &pb.YuetuSearchRequest{
 		BaseRequest: &pb.SimpleRequest{
-			Cid: "tongchengyt",
+			Cid: "qunarytb",
 			TraceId: "2354435-jgidg",
 		},
 		Trip:&pb.Trip{
-			DepartureCode:"SIN",
-			ArrivalCode:"SYD",
+			DepartureCode:"CNX",
+			ArrivalCode:"BKK",
 			DepartureDate:"2020-07-20T16:00:00Z",
 		},
 		AdultNum:1,
