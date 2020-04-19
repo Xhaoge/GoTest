@@ -44,7 +44,7 @@ func main() {
 		log.Fatalf("client.Search err: %v", err)
 	}
 	log.Println("resp: ",resp)
-	log.Printf("resp: %s", resp.GetRouting()[0].GetData())
-	log.Printf("resp: %s ",resp.GetBaseResponse())
-	log.Printf("resp: %f ",resp.GetRouting()[0].GetAdultPrice())
+	//log.Printf("resp: %s", resp.GetRouting()[0].GetData())
+	//log.Printf("resp: %s ",resp.GetBaseResponse())
+	//log.Printf("resp: %f ",resp.GetRouting()[0].GetAdultPrice())
 }

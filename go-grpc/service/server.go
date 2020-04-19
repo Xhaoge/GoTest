@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	pb "godie/go-grpc/protos"
 	"log"
 	"net"
+	"reflect"
 
 	"github.com/Xhaoge/sh/myhttp"
 	"google.golang.org/grpc"
@@ -44,13 +44,23 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 
 func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*pb.YuetuSearchResponse, error) {
 	res ,_ := buildYuetuReq(r)
-	var resp pb.YuetuSearchResponse
-	err := json.Unmarshal(res,&resp)
-	if err != nil {
-		fmt.Println("sring to struct err: ",err)
-	}
+	fmt.Println("type res: ",reflect.TypeOf(&res))
+	//var resp pb.YuetuSearchResponse
+	//err := json.Unmarshal(res,&resp)
+	//if err != nil {
+	//	fmt.Println("[]byte to struct err: ",err)
+	//}
 	fmt.Println("YuetuSearchResponse string:  ",string(res))
-	return &resp, nil
+	return &pb.YuetuSearchResponse{
+		BaseResponse:&pb.SimpleResponse{
+			Status:200,
+			Message:"success",
+			Cid:"yuetu",
+			TraceId:"jwoejoag-jiejg",
+			Pid:"mondee",
+		},
+		SessionId:"24526345662",
+	}, nil
 }
 
 
