@@ -28,9 +28,7 @@ import (
 )
 
 var (
-	// WithResolverBuilder is exported by dialoptions.go
-	WithResolverBuilder interface{} // func (resolver.Builder) grpc.DialOption
-	// WithHealthCheckFunc is not exported by dialoptions.go
+	// WithHealthCheckFunc is set by dialoptions.go
 	WithHealthCheckFunc interface{} // func (HealthChecker) DialOption
 	// HealthCheckFunc is used to provide client-side LB channel health checking
 	HealthCheckFunc HealthChecker
@@ -60,7 +58,7 @@ var (
 //
 // The health checking protocol is defined at:
 // https://github.com/grpc/grpc/blob/master/doc/health-checking.md
-type HealthChecker func(ctx context.Context, newStream func(string) (interface{}, error), setConnectivityState func(connectivity.State), serviceName string) error
+type HealthChecker func(ctx context.Context, newStream func(string) (interface{}, error), setConnectivityState func(connectivity.State, error), serviceName string) error
 
 const (
 	// CredsBundleModeFallback switches GoogleDefaultCreds to fallback mode.

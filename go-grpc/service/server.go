@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	pb "godie/go-grpc/protos"
 	"log"
@@ -28,26 +29,30 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 		"FromCity":r.Trip.DepartureCode,
 		"ToCity":r.Trip.ArrivalCode,
 		"Cabin":string(r.Cabin),
-		"FromDate":"20200627",
+		"FromDate":r.Trip.DepartureDate,
 		"TripType":"1",
 	}
 	myReq.SetSendType("json")
 	myReq.SetBody(req)
-	fmt.Println("%v: ",myReq)
 	res,err := myReq.Post()
 	if err != nil {
-		fmt.Println(err)
 		return nil,err
 	}
 	return res,nil
 }
 
+
 func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*pb.YuetuSearchResponse, error) {
-	res ,err := buildYuetuReq(r)
-	fmt.Println("res err: ",err)
-	fmt.Println("res:  ",string(res))
-	return &pb.YuetuSearchResponse{}, nil
+	res ,_ := buildYuetuReq(r)
+	var resp pb.YuetuSearchResponse
+	err := json.Unmarshal(res,&resp)
+	if err != nil {
+		fmt.Println("sring to struct err: ",err)
+	}
+	fmt.Println("YuetuSearchResponse string:  ",string(res))
+	return &resp, nil
 }
+
 
 func main() {
 	fmt.Println("grpc hello world.......")

@@ -27,7 +27,7 @@ func main() {
 		Trip:&pb.Trip{
 			DepartureCode:"CNX",
 			ArrivalCode:"BKK",
-			DepartureDate:"2020-07-20T16:00:00Z",
+			DepartureDate:"20200720",
 		},
 		Cabin: pb.CabinClass_E,
 		AdultNum:1,
@@ -39,10 +39,12 @@ func main() {
 	}
 	fmt.Println("req :",req.TargetProviders)
 	resp, err := client.Search(context.Background(), req)
-	fmt.Println("resp:%v",resp)
+
 	if err != nil {
 		log.Fatalf("client.Search err: %v", err)
 	}
-
-	log.Printf("resp: %s", resp)
+	log.Println("resp: ",resp)
+	log.Printf("resp: %s", resp.GetRouting()[0].GetData())
+	log.Printf("resp: %s ",resp.GetBaseResponse())
+	log.Printf("resp: %f ",resp.GetRouting()[0].GetAdultPrice())
 }

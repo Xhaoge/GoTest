@@ -27,66 +27,13 @@ import (
 	"testing"
 	"time"
 
+	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/resolver"
 	"google.golang.org/grpc/resolver/manual"
 	"google.golang.org/grpc/serviceconfig"
 	"google.golang.org/grpc/status"
 )
-
-func (s) TestParseTarget(t *testing.T) {
-	for _, test := range []resolver.Target{
-		{Scheme: "dns", Authority: "", Endpoint: "google.com"},
-		{Scheme: "dns", Authority: "a.server.com", Endpoint: "google.com"},
-		{Scheme: "dns", Authority: "a.server.com", Endpoint: "google.com/?a=b"},
-		{Scheme: "passthrough", Authority: "", Endpoint: "/unix/socket/address"},
-	} {
-		str := test.Scheme + "://" + test.Authority + "/" + test.Endpoint
-		got := parseTarget(str)
-		if got != test {
-			t.Errorf("parseTarget(%q) = %+v, want %+v", str, got, test)
-		}
-	}
-}
-
-func (s) TestParseTargetString(t *testing.T) {
-	for _, test := range []struct {
-		targetStr string
-		want      resolver.Target
-	}{
-		{targetStr: "", want: resolver.Target{Scheme: "", Authority: "", Endpoint: ""}},
-		{targetStr: ":///", want: resolver.Target{Scheme: "", Authority: "", Endpoint: ""}},
-		{targetStr: "a:///", want: resolver.Target{Scheme: "a", Authority: "", Endpoint: ""}},
-		{targetStr: "://a/", want: resolver.Target{Scheme: "", Authority: "a", Endpoint: ""}},
-		{targetStr: ":///a", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a"}},
-		{targetStr: "a://b/", want: resolver.Target{Scheme: "a", Authority: "b", Endpoint: ""}},
-		{targetStr: "a:///b", want: resolver.Target{Scheme: "a", Authority: "", Endpoint: "b"}},
-		{targetStr: "://a/b", want: resolver.Target{Scheme: "", Authority: "a", Endpoint: "b"}},
-		{targetStr: "a://b/c", want: resolver.Target{Scheme: "a", Authority: "b", Endpoint: "c"}},
-		{targetStr: "dns:///google.com", want: resolver.Target{Scheme: "dns", Authority: "", Endpoint: "google.com"}},
-		{targetStr: "dns://a.server.com/google.com", want: resolver.Target{Scheme: "dns", Authority: "a.server.com", Endpoint: "google.com"}},
-		{targetStr: "dns://a.server.com/google.com/?a=b", want: resolver.Target{Scheme: "dns", Authority: "a.server.com", Endpoint: "google.com/?a=b"}},
-
-		{targetStr: "/", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "/"}},
-		{targetStr: "google.com", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "google.com"}},
-		{targetStr: "google.com/?a=b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "google.com/?a=b"}},
-		{targetStr: "/unix/socket/address", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "/unix/socket/address"}},
-
-		// If we can only parse part of the target.
-		{targetStr: "://", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "://"}},
-		{targetStr: "unix://domain", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "unix://domain"}},
-		{targetStr: "a:b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a:b"}},
-		{targetStr: "a/b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a/b"}},
-		{targetStr: "a:/b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a:/b"}},
-		{targetStr: "a//b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a//b"}},
-		{targetStr: "a://b", want: resolver.Target{Scheme: "", Authority: "", Endpoint: "a://b"}},
-	} {
-		got := parseTarget(test.targetStr)
-		if got != test.want {
-			t.Errorf("parseTarget(%q) = %+v, want %+v", test.targetStr, got, test.want)
-		}
-	}
-}
 
 // The target string with unknown scheme should be kept unchanged and passed to
 // the dialer.
@@ -133,7 +80,7 @@ func testResolverErrorPolling(t *testing.T, badUpdate func(*manual.Resolver), go
 	defer rcleanup()
 	rn := make(chan struct{})
 	defer func() { close(rn) }()
-	r.ResolveNowCallback = func(resolver.ResolveNowOption) { rn <- struct{}{} }
+	r.ResolveNowCallback = func(resolver.ResolveNowOptions) { rn <- struct{}{} }
 
 	defaultDialOptions := []DialOption{
 		WithInsecure(),
@@ -178,6 +125,19 @@ func testResolverErrorPolling(t *testing.T, badUpdate func(*manual.Resolver), go
 	}
 }
 
+const happyBalancerName = "happy balancer"
+
+func init() {
+	// Register a balancer that never returns an error from
+	// UpdateClientConnState, and doesn't do anything else either.
+	fb := &funcBalancer{
+		updateClientConnState: func(s balancer.ClientConnState) error {
+			return nil
+		},
+	}
+	balancer.Register(&funcBalancerBuilder{name: happyBalancerName, instance: fb})
+}
+
 // TestResolverErrorPolling injects resolver errors and verifies ResolveNow is
 // called with the appropriate backoff strategy being consulted between
 // ResolveNow calls.
@@ -188,7 +148,8 @@ func (s) TestResolverErrorPolling(t *testing.T) {
 		// UpdateState will block if ResolveNow is being called (which blocks on
 		// rn), so call it in a goroutine.
 		go r.CC.UpdateState(resolver.State{})
-	})
+	},
+		WithDefaultServiceConfig(fmt.Sprintf(`{ "loadBalancingConfig": [{"%v": {}}] }`, happyBalancerName)))
 }
 
 // TestServiceConfigErrorPolling injects a service config error and verifies
@@ -202,7 +163,8 @@ func (s) TestServiceConfigErrorPolling(t *testing.T) {
 		// UpdateState will block if ResolveNow is being called (which blocks on
 		// rn), so call it in a goroutine.
 		go r.CC.UpdateState(resolver.State{})
-	})
+	},
+		WithDefaultServiceConfig(fmt.Sprintf(`{ "loadBalancingConfig": [{"%v": {}}] }`, happyBalancerName)))
 }
 
 // TestResolverErrorInBuild makes the resolver.Builder call into the ClientConn

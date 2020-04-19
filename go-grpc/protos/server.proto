@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package protos;
 
+import "google/protobuf/timestamp.proto";
 
 service SHService {
     rpc search (YuetuSearchRequest) returns (YuetuSearchResponse) {
@@ -15,8 +16,11 @@ message SimpleRequest {
 }
 
 message SimpleResponse {
-    int32   status = 1;  // 响应状态码
-    string  msg = 2;    // 信息
+    int32 status = 1; //成功失败
+    string message = 2; //消息
+    string cid = 3; //
+    string trace_id = 4;
+    string pid = 5; // The provider ID, PCC for GDS providers
  }
 
 message Trip {
@@ -50,6 +54,8 @@ message YuetuSearchResponse {
     SimpleResponse base_response = 1;
     repeated Routing routing = 2;
     repeated TraceSpan trace_spans = 3;
+    string session_id = 4;
+    TraceTimes trace_times = 6;
 }
 
 message Routing {
@@ -84,8 +90,8 @@ message Routing {
     int32 national_type = 29; // 乘客国籍类型：0代表全部 1代表适用 2代表不适用 暂无;
     string nationality = 30; //  乘客国籍：输入国家二字码，多个用逗号分隔，最多支持5个国家  暂无;
     string suit_age = 31; //  乘客年龄，可不输入代表不限制；可输入格式如：2~60，表示该价格只适用于2至60的乘客，仅支持正整数，仅支持一个年龄段  暂无;
-    int32 ticket_invoice_type = 32; // 报销凭证类型：0行程单/ 1 发票 / 2 电子发票 暂时没有这个配置哦，先放着  / 3 境外电子凭证
-    // Rule rule = 33;
+    int32 ticket_invoice_type = 32; // 报销凭证类型：0行程单/1旅行发票/2电子发票
+    Rule rule = 33;
     string adult_type = 34; // 成人类型 例如ADT,JCB
     string child_type = 35; // 儿童类型 例如CNN,JNN
     string infant_type = 36;
@@ -115,14 +121,14 @@ message Routing {
     double ori_infant_price = 55;
     double ori_infant_tax = 56;
 
-    string pos_location = 57; //销售地 取值供应商配置中的pos_country 销售所在国家二字码
+    string pos_location = 57; //销售地
     bool itinerary_splicing = 58; // 是否允许航程和航程之间的拼接
 
     repeated CurrencyConversion currency_conversions = 59; // record of price convert to master currency
     string master_currency = 60;
     string provider_currency = 61;
     string provider_name = 62; // 供应商
-    // repeated PriceChangesByPolicy policy_price_changes = 63;
+    repeated PriceChangesByPolicy policy_price_changes = 63;
     repeated TraceSpan trace_spans = 64;
     repeated EvictionMark eviction_marks = 65;
 
@@ -137,7 +143,7 @@ message Routing {
     double infant_publish_price = 71;
     double infant_publish_tax = 72;
 
-    int32 valid_segments_count = 73;
+    int32 validSegmentsCount = 73;
     int32 ticket_source = 74; // avia 使用
     bool sale_baggage = 75; // 是否可售卖行李 行李增值服务
     bool online_check_in = 76; // 是否在线值机
@@ -152,11 +158,11 @@ message Routing {
     string purchase_date = 81; // 跨天次日存价日期 例如:2019-09-24
     string earliest_tkt_time = 82; // 跨天次日存价 最早出票时间 例如:2019-09-24 13:03:00
 
-    // google.protobuf.Timestamp birth_time = 83;  这个 routing 的生成时间
+    google.protobuf.Timestamp birth_time = 83; // 这个 routing 的生成时间
+
     string provider_pcc = 84; // sabre provider pcc
     string search_response_time = 85; // 搜索返回时间 格式yyyy-MM-dd HH:mm:ss
     string actual_provider = 86; // 搜索 验价等步骤实际的返回供应商
-    string provider_location = 87; //供应商所在地 取值供应商配置中 location 所在地
 }
 
 message Itinerary {
@@ -250,19 +256,84 @@ message CurrencyConversion {
     string to = 2;
     double rate = 3;
     string source = 4;
-    // google.protobuf.Timestamp timestamp = 5;
+    google.protobuf.Timestamp timestamp = 5;
     string policy_id = 6;
 }
 
 message PriceChangesByPolicy {
-    string policyid = 1;
+    string policy_desc = 3; //desc of the policy
+    string display_number = 4; // 政策编号 前端要用
+    string policy_id = 5; // 政策ID 前端要用
+    PolicyType policy_type = 6; // 政策类型
+    PriceChangeByPolicy adult_change = 1;
+    PriceChangeByPolicy child_change = 2;
+    PriceChangeByPolicy infant_change = 7;
+    bool is_fee_apply_to_provider = 9;
+    repeated PercentageChangeDetail other_percentage_change_details = 8;
+    repeated AbsChangeDetail other_abs_change_details = 10;
+}
+
+enum PolicyType{
+    COMMISSION = 0; // 前返
+    BACKEND = 1; // 后返
+    INCENTIVE = 2; // 航段奖励
+    MARKUP = 3; // 供应加价
+    PLATFORM = 4; // 平台
+    TICKET_FEE = 5; // 开票费
+    UNI_MARKUP = 6; // 统一加价
+    VCC = 7; // vcc
+    FARE_RULE = 8; //farerule
+    MANUAL_FARE_RULE = 9; //人工farerule
+    AI = 10; //自动调价
+}
+
+message PriceChangeByPolicy {
+    PercentageChange percentage_change = 1;
+    AbsChange abs_change = 2;
+    AbsChange total_change = 3;
+}
+
+message PercentageChange {
+    double percentage = 1;
+    bool excludeTax = 2;
+}
+
+message AbsChange {
+    double amount = 1;
+    string currency = 2;
+}
+
+message PercentageChangeDetail {
+    PercentageChangeDetailDesc desc = 1; // 是什么类型的百分比
+    double percentage_change = 2; // 配置的百分比是多少
+    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+}
+
+enum PercentageChangeDetailDesc {
+    ADULT_YQ_CHANGE = 0;
+    ADULT_YR_CHANGE = 1;
+    ADULT_UO_CHANGE = 2;
+    CHILD_YQ_CHANGE = 3;
+    CHILD_YR_CHANGE = 4;
+    CHILD_UO_CHANGE = 5;
+    VCC_ADULT_RECEIVABLE = 6;
+    VCC_CHILD_RECEIVABLE = 7;
+}
+
+message AbsChangeDetail {
+    AbsChangeDetailDesc desc = 1; // 是什么类型的绝对值
+    AbsChange abs_total = 2; //原始绝对值以及币种
+    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+}
+
+enum AbsChangeDetailDesc {
+    INCENTIVE_RECEIVABLE = 0;
 }
 
 message EvictionMark {
     string eviction_reason = 1;
     repeated TraceSpan trace_spans = 2;
 }
-
 
 message TraceSpan {
     /*
@@ -279,7 +350,55 @@ message TraceSpan {
     string application = 3;
     string desc = 4;
     map<string, string> tags = 16; // 用来存放额外的信息
-    // google.protobuf.Timestamp created_at = 17;
+    google.protobuf.Timestamp created_at = 17;
+}
+
+message TraceTimes {
+    string trace_id = 1;
+    TraceTimer self = 2;
+    repeated TraceTimers sub_timers = 3;
+    bool persist = 4; //是否持久化
+}
+
+message TraceTimers {
+    string trace_id = 1;
+    TraceTimer self = 2;
+    repeated TraceTimers sub_timers = 3;
+    bool persist = 4; //是否持久化
+}
+
+message TraceTimer {
+    google.protobuf.Timestamp start_at = 1;
+    google.protobuf.Timestamp stop_at = 2;
+    string application = 3;
+    string operation = 4;
+    string nick_name = 5;
+    bool timeout = 6;
+    bool bypassed = 7;
+    string status = 8;
+    string msg = 9;
+    int32 routing_amount = 10;
+    AdditionalReqInfo additional_req_info = 11;
+    string dep_date = 12;
+    string ret_date = 13;
+    TripType trip_type = 14;
+    string dep_city = 15;
+    string arr_city = 16;
+    string dep_country = 17;
+    string arr_country = 18;
+}
+
+enum TripType {
+    OW = 0;
+    RT = 1;
+    MT = 2;
+    UNKNOWN = 3; // 未知 主要用于去哪增值外派订单
+}
+
+message AdditionalReqInfo {
+    string ctrip_channel = 1;
+    string ctrip_main_channel = 2;
+    string ctrip_sub_channel_id = 3;
 }
 
 message AIPolicyChangeInfo {
