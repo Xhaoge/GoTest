@@ -9,10 +9,206 @@ service SHService {
         };
     }
 
+enum CabinClass {
+    //默认所有
+    A = 0; //所有
+    F = 1; //头等
+    B = 2; //商务
+    E = 3; //经济
+    P = 4; //超经
+}
+
+message TtlSearchChange {
+    string ttl_key = 1;
+    int32 step_size = 2;
+}
+enum TripType {
+    OW = 0;
+    RT = 1;
+    MT = 2;
+    UNKNOWN = 3; // 未知 主要用于去哪增值外派订单
+}
+
+enum FareType {
+    PRIVATE = 0;
+    PUBLISHED = 1;
+}
+
+enum Gender {
+    NA_GENDER = 0;
+    MALE = 1;
+    FEMALE = 2;
+}
+
+enum TaxType {
+    NOTAX = 0; //税费类型 0未含税
+    HAVETAX = 1; // 1 已含税
+}
+
+enum PaymentType {
+    CASH = 0;
+    CREDIT_CARD = 1;
+}
+
+enum PassengerPriceType {
+    ADT = 0;
+    JCB = 1;
+    PFA = 2;
+    IT = 3;
+}
+
+enum MainProcessActionType {
+    SEARCH = 0;
+    VERIFY = 1;
+    ORDER = 2;
+}
+
+message TraceSpan {
+    /*
+    * 该消息体用来保存各种需要trace的处理记录，例如在搜索时需要记录匹配上的黑白名单、以及应用过的各种政策
+    */
+    string span_id = 1; // 匹配上的实体的ID，如果该Span记录的是一次政策，这该字段对应政策ID；同理，如果记录的是一次黑白名单，则对应的是黑白名单的ID
+    enum TraceType {
+        None = 0;
+        WB = 1;
+        POLICY = 2;
+        OTHERS = 3;
+    }
+    TraceType trace_type = 2;
+    string application = 3;
+    string desc = 4;
+    map<string, string> tags = 16; // 用来存放额外的信息
+    google.protobuf.Timestamp created_at = 17;
+}
+
+message YuetuSearchRequest {
+    SimpleRequest base_request = 1;
+    repeated Trip trip = 2;
+    CabinClass cabin = 3;
+    int32 adult_num = 4;
+    int32 child_num = 5;
+    int32 infant_num = 6;
+    string currency = 7;
+    int32 max_routing_count = 8; // 请求报价数量
+    int32 max_connection_count = 9; // 最大中转次数
+    repeated TraceSpan trace_spans = 17;
+    bool bypass_cache = 18;
+    bool god_perspective = 19; //上帝视角  强行走通搜索,各项拦截入span内
+    bool use_mock_data = 20;
+    repeated string target_providers = 21; // 比价工具参数，其它各个平台没有该参数
+    int32 timeoutSeconds = 22; // If set, this value will override all other timeout settings. e.g. Platform search timeout
+}
+
+
+message YuetuVerifyRequest {
+    SimpleRequest base_request = 5;
+    int32 adult_num = 1; //T
+    int32 child_num = 2; //T
+    int32 infant_num = 3; //T
+    string session_id = 4; //T
+    Routing routing = 6;
+    string currency = 7;
+    double disguiseSuccessRate = 8; //伪装成功的比率，<1   如果是=0.8意思是80%的失败都伪装成成功
+    string platform_reference_id = 9; // 平台端传过来的reference id
+}
+
+message YuetuPayRequest {
+    SimpleRequest base_request = 1;
+    string pnr_code = 2; ///T
+    string order_no = 3; //暂无
+    string session_id = 4; //T
+    Routing routing = 6;
+}
+message YuetuOrderRequest {
+    SimpleRequest base_request = 1;
+    string session_id = 2; //T
+    Routing routing = 3;
+    Contact contact = 4; //T
+    repeated Passenger passenger = 5; //T
+    string currency = 7;
+    PaymentType payment_type = 8; // T 支付方式
+    CreditCardInfo credit_card_info = 9; // 信用卡信息
+    bool tolerate_provider_timeout = 11; // 是否容忍供应商侧的生单超时，当为true时，当供应商超时时返回成功的结果。当前实现时，针对有paycheck接口的平台需要设置改值为true
+}
+
+message YuetuFareRuleRequest {
+    SimpleRequest base_request = 1;
+    Routing routing = 2;
+}
+
+message YuetuFareRuleResponse {
+    SimpleResponse base_response = 1;
+}
+
+enum CreditCardType {
+    MASTER_CARD = 0;
+    VISA = 1;
+    AMERICA_EXPRESS = 2;
+}
+
+message CreditCardInfo {
+
+    string card_holder = 1; // 持卡人姓名
+
+    string card_number = 2; //  卡号  T
+
+    string expired_date = 3; // the expired Date of the card  T  07/22  2022年7月
+
+    CreditCardType card_type = 4; // 信用卡类型  T
+
+    string cvv = 5; // CVV  T
+}
+
+message YuetuPnrInfoRequest {
+    SimpleRequest base_request = 1;
+    string pnr_code = 2; // pnr
+    string session_id = 3;
+    string order_no = 4; // 供应商订单号
+}
+
+message YuetuPnrCancelRequest {
+    SimpleRequest base_request = 1;
+    string pnr_code = 2; // pnr
+    string session_id = 3;
+}
+
+message YuetuFlightChangeRequest {
+    SimpleRequest base_request = 1;
+}
+
+message YuetuTicketingRequest {
+    SimpleRequest base_request = 1;
+    string pnr_code = 2; // pnr
+    string session_id = 3;
+    string order_no = 4; // 供应商订单号
+}
+
+message YuetuCheckTicketRequest {
+    SimpleRequest base_request = 1;
+    Routing routing = 2;
+    string pnr_code = 3;
+    string currency = 4;
+    int32 adultNumber = 5;
+    int32 childNumber = 6;
+    int32 infantNumber = 7;
+}
+
+message YuetuTicketInfoRequest {
+    SimpleRequest base_request = 1;
+    string ticket_number = 2;
+}
+
+message YuetuScanTicketRequest {
+    SimpleRequest base_request = 1;
+    string ticket_number = 2;
+}
 
 message SimpleRequest {
-    string cid = 1; // platform 平台
+    string cid = 1; //平台
     string trace_id = 2; //追踪id
+    string referred_trace_id = 3; // The trace_id of previous step, used to track all related operations
+    string request_key = 4;
+    bool stress_test = 5; //是否是压力测试请求(alitrip)
 }
 
 message SimpleResponse {
@@ -21,33 +217,12 @@ message SimpleResponse {
     string cid = 3; //
     string trace_id = 4;
     string pid = 5; // The provider ID, PCC for GDS providers
- }
+}
 
 message Trip {
-    string  departure_code = 1;  // 出发城市
-    string  arrival_code = 2;    // 到达城市
-    string departure_date = 3; //起飞时间
-}
-
-enum CabinClass {
-    // 默认所有
-    A = 0; // 所有
-    F = 1; // 头等
-    B = 2; // 商务
-    E = 3; // 经济
-    P = 4; // 超经
-}
-
-message YuetuSearchRequest {
-    SimpleRequest base_request = 1;
-    Trip    trip = 2;
-    CabinClass cabin = 3;
-    int32 adult_num = 4;
-    int32 child_num = 5;
-    int32 infant_num = 6;
-    bool bypass_cache = 7; // 是否拿取缓存
-    bool god_perspective = 8; // 上帝视角 强行走通搜索，各项拦截入span内
-    repeated string target_providers = 9; //比价工具参数，真实平台无此参数
+    string departure_code = 1; //出发城市
+    string arrival_code = 2; //到达城市
+    google.protobuf.Timestamp departure_date = 3; //起飞时间
 }
 
 message YuetuSearchResponse {
@@ -55,7 +230,190 @@ message YuetuSearchResponse {
     repeated Routing routing = 2;
     repeated TraceSpan trace_spans = 3;
     string session_id = 4;
-    TraceTimes trace_times = 6;
+    TraceTimers trace_timers = 6;
+}
+
+message YuetuVerifyResponse {
+    SimpleResponse base_response = 1;
+    Routing routing = 2;
+    string session_id = 3;
+    repeated TraceSpan trace_spans = 4;
+    TraceTimers trace_timers = 5;
+}
+
+message YuetuPayResponse {
+    SimpleResponse base_response = 1;
+    Routing routing = 2;
+    string pnr_code = 3;
+    string order_no = 4; // 暂无
+    string session_id = 5;
+}
+
+message YuetuOrderResponse {
+    SimpleResponse base_response = 1;
+    string session_id = 2;
+    Routing routing = 3;
+    string pnr_code = 4;
+    string order_no = 5; // 供应商订单号
+    string airline_code = 6; // 航司大编
+}
+
+message YuetuPnrInfoResponse {
+    SimpleResponse base_response = 1;
+    string pnr_code = 2; // pnr
+    string airline_code = 3; // 航司大编
+    string session_id = 4;
+    string ticket_number = 5; // pnr里票号
+    repeated Segment segment = 6; // 航段信息
+    repeated Passenger passenger = 7; //乘客信息
+    bool segment_status_ok = 8; // 航段状态是否是OK的
+    double adult_price = 9;
+    double adult_tax = 10;
+    double child_price = 11;
+    double child_tax = 12;
+    double infant_price = 13;
+    double infant_tax = 14;
+    int32 adult_tax_type = 15; // 0, 未含税； 1，已含税
+    int32 child_tax_type = 16; // 0, 未含税； 1，已含税
+    int32 infant_tax_type = 17; // 0, 未含税； 1，已含税
+}
+
+message YuetuPnrCancelResponse {
+    SimpleResponse base_response = 1;
+    string session_id = 2;
+}
+
+message YuetuFlightChangeResponse {
+    SimpleResponse base_response = 1;
+}
+
+message YuetuTicketingResponse {
+    SimpleResponse base_response = 1;
+    string session_id = 2;
+}
+
+message YuetuCheckTicketResponse {
+    SimpleResponse base_response = 1;
+    Routing routing = 2; //
+}
+
+message YuetuTicketInfoResponse {
+    SimpleResponse base_response = 1;
+    repeated Segment segment = 2;
+}
+
+message YuetuScanTicketResponse {
+    SimpleResponse base_response = 1;
+    string ticket_number = 2;
+    repeated CouponInfo coupon_info = 3;
+}
+
+message CouponInfo {
+    CouponStatus coupon_status = 1;
+    string booking_status = 2; // OK
+    string departure_airport = 3; // 出发机场
+    string arrival_airport = 4; // 到达机场
+}
+
+enum CouponStatus {
+    OPEN = 0; // 可使用
+    USED = 1; // 已使用
+    VOIDED = 2; //	已废票
+    EXCHANGED = 3; // 已改期
+    REFUND = 4; //	已退票
+    SUSPENDED = 5; // 已挂起
+    TICKETED = 6; // 已出票
+    CONTROLLED = 7; //	机场控制
+    CHECKED_IN = 8; // 已值机
+    BOARDED = 9; // 已登机
+    OTHERS = 10; // 其他状态
+}
+
+message PercentageChange {
+    double percentage = 1;
+    bool excludeTax = 2;
+}
+
+message AbsChange {
+    double amount = 1;
+    string currency = 2;
+}
+
+message PriceChangesByPolicy {
+    string policy_desc = 3; //desc of the policy
+    string display_number = 4; // 政策编号 前端要用
+    string policy_id = 5; // 政策ID 前端要用
+    PolicyType policy_type = 6; // 政策类型
+    PriceChangeByPolicy adult_change = 1;
+    PriceChangeByPolicy child_change = 2;
+    PriceChangeByPolicy infant_change = 7;
+    bool is_fee_apply_to_provider = 9;
+    repeated PercentageChangeDetail other_percentage_change_details = 8;
+    repeated AbsChangeDetail other_abs_change_details = 10;
+}
+
+//作用在每成人/儿童上的价格修改
+message PriceChangeByPolicy {
+    PercentageChange percentage_change = 1;
+    AbsChange abs_change = 2;
+    AbsChange total_change = 3;
+}
+
+enum PolicyType {
+    COMMISSION = 0; // 前返
+    BACKEND = 1; // 后返
+    INCENTIVE = 2; // 航段奖励
+    MARKUP = 3; // 供应加价
+    PLATFORM = 4; // 平台
+    TICKET_FEE = 5; // 开票费
+    UNI_MARKUP = 6; // 统一加价
+    VCC = 7; // vcc
+    FARE_RULE = 8; //farerule
+    MANUAL_FARE_RULE = 9; //人工farerule
+    AI = 10; //自动调价
+}
+
+enum PercentageChangeDetailDesc {
+    ADULT_YQ_CHANGE = 0;
+    ADULT_YR_CHANGE = 1;
+    ADULT_UO_CHANGE = 2;
+    CHILD_YQ_CHANGE = 3;
+    CHILD_YR_CHANGE = 4;
+    CHILD_UO_CHANGE = 5;
+    VCC_ADULT_RECEIVABLE = 6;
+    VCC_CHILD_RECEIVABLE = 7;
+}
+
+enum AbsChangeDetailDesc {
+    INCENTIVE_RECEIVABLE = 0;
+}
+
+// 百分比换算成 绝对值
+message PercentageChangeDetail {
+    PercentageChangeDetailDesc desc = 1; // 是什么类型的百分比
+    double percentage_change = 2; // 配置的百分比是多少
+    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+}
+
+message AbsChangeDetail {
+    AbsChangeDetailDesc desc = 1; // 是什么类型的绝对值
+    AbsChange abs_total = 2; //原始绝对值以及币种
+    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+}
+
+
+message EvictionMark {
+    string eviction_reason = 1;
+    repeated TraceSpan trace_spans = 2;
+}
+
+message CurrencyConversion {
+    string from = 1;
+    string to = 2;
+    double rate = 3;
+    string source = 4;
+    google.protobuf.Timestamp timestamp = 5;
+    string policy_id = 6;
 }
 
 message Routing {
@@ -165,6 +523,23 @@ message Routing {
     string actual_provider = 86; // 搜索 验价等步骤实际的返回供应商
 }
 
+message AIPolicyChangeInfo {
+    double adult_adjust_amount = 1; //自动调价金额
+    string adult_adjust_currency = 2; //自动调价币种
+    string policy_number = 3; //政策编号
+}
+
+enum ProviderType {
+    PROVIDER_API = 0;
+    PROVIDER_SABRE_1B = 1;
+    PROVIDER_SABRE_1S = 2;
+    PROVIDER_AMADEUS_1A = 3;
+    PROVIDER_TRAVELPORT_1P = 4;
+    PROVIDER_TRAVELPORT_1G = 5;
+    PROVIDER_ETERM = 6;
+    PROVIDER_OTHER = 7;
+}
+
 message Itinerary {
     string origin_city = 1; //出发城市   //T
     string destination_city = 2; //返回城市    //T
@@ -225,146 +600,280 @@ message StopCity {
     string airport_code = 5; // 停留机场三字码
 }
 
+message RuleFee {
+    int32 refund_before = 1; // 起飞前退票 是否允许 0 不允许 1 允许 2 未知
+    double refund_before_fee = 2; // 起飞前退票罚金
+    int32 change_before = 3; // 起飞前改签是否允许 0 不允许 1 允许 2 未知
+    double change_before_fee = 4; // 起飞前改签罚金
+    int32 refund_before_noshow = 5; // no show 改签罚金 是否允许 0 不允许 1 允许 2 未知
+    double refund_before_noshow_fee = 6; // no show 改签罚金
+    int32 change_before_noshow = 7; // 使用 no show 退票罚金 是否允许 0 不允许 1 允许 2 未知
+    double change_before_noshow_fee = 8; // 使用 no show 退票罚金
+    int32 refund_after = 9; // 部分未使用 退票罚金 是否允许 0 不允许 1 允许 2 未知
+    double refund_after_fee = 10; // 部分未使用 退票罚金
+    int32 change_after = 11; // 部分未使用 改签罚金 是否允许 0 不允许 1 允许 2 未知
+    double change_after_fee = 12; // 部分未使用 改签罚金
+    int32 refund_after_noshow = 13; // 部分未使用no show 退票罚金 是否允许 0 不允许 1 允许 2 未知
+    double refund_after_noshow_fee = 14; // 部分未使用no show 退票罚金
+    int32 change_after_noshow = 15; // 部分未使用 no show 改签罚金 是否允许 0 不允许 1 允许 2 未知
+    double change_after_noshow_fee = 16; // 部分未使用 no show 改签罚金
+    string currency = 17;
+}
+
+message RuleChangeByPolicy {
+    double refund_before_fee_config = 1; // 起飞前退票罚金 政策配置
+    double change_before_fee_config = 2; // 起飞前改签罚金 政策配置
+    double refund_before_noshow_fee_config = 3; // no show 改签罚金 政策配置
+    double change_before_noshow_fee_config = 4; // 使用 no show 退票罚金 政策配置
+    double refund_after_fee_config = 5; // 部分未使用 退票罚金 政策配置
+    double change_after_fee_config = 6; // 部分未使用 改签罚金 政策配置
+    double refund_after_noshow_fee_config = 7; // 部分未使用no show 退票罚金 政策配置
+    double change_after_noshow_fee_config = 8; // 部分未使用 no show 改签罚金 政策配置
+    string currency = 9; // 政策页面配置的货币
+    bool is_percentage = 10; // true 为百分比， false为绝对值
+}
+
+message RuleChangeDetail {
+    RuleFee change_fee = 1; // rule金额变化量
+    RuleChangeByPolicy rule_change_by_policy = 6; // 政策具体配置
+    string policy_desc = 2; //desc of the policy
+    string display_number = 3; // 政策编号 前端要用
+    string policy_id = 4; // 政策ID 前端要用
+    string policy_type = 5; // 政策类型 前端要用
+    RefundRuleChangeDetail refund_rule_change_detail = 7; // 强行扭转平台退票规则记录
+}
+
+message RefundRuleChangeDetail {
+    bool change_before_departure = 1; // 是否可改
+    bool change_to_not_refundable = 2; // 根据平台供应商 如果可改期强行扭转为不可退票
+}
+
+message Rule {
+    bool use_old = 1;
+    int32 rule_from_ota = 2; // 0不是 1是
+    int32 mini_rule = 3; // 是否简化版（不精确） 0 不f是 1 是
+    int32 refund_before_dep = 4; // 起飞前是否允许退票 是否允许 0 不允许 1 允许 2 未知
+    double refund_before_dep_fee = 5; // 起飞前退票罚金
+    int32 change_before_dep = 6; // 起飞前是否允许改签 是否允许 0 不允许 1 允许 2 未知
+    double change_before_dep_fee = 7; // 起飞前改签罚金
+    int32 no_show_change = 8; // no show 改签 是否允许 0 1 2
+    double no_show_change_fee = 9; // no show 改签罚金
+    int32 no_show_refund = 10; // 使用 no show 退票
+    double no_show_refund_fee = 11; // 使用 no show 退票罚金
+    int32 part_refund = 12; // 部分未使用 退票 是否允许 0 1 2
+    double part_refund_fee = 13; // 部分未使用 退票罚金
+    int32 part_endorse = 14; // 部分未使用 改签 是否允许 0 1 2
+    double part_endorse_price = 15; // 部分未使用 改签罚金
+    string currency = 16;
+    int32 no_show_change_after = 17; // 部分未使用 no show 是否允许改签 是否允许 0 不允许 1 允许 2 未知
+    double no_show_change_after_fee = 18; // 部分未使用 no show 改签罚金
+    int32 no_show_refund_after = 19; // 部分未使用 no show 是否允许退票 是否允许 0 不允许 1 允许 2 未知
+    double no_show_refund_after_fee = 20; // 部分未使用no show 退票罚金
+    string cn_remark = 21; // 中文备注
+    string en_remark = 22; // 英文备注
+    RuleChangeDetail change_detail = 24; // rule变化记录
+    RuleFee origin_rule_fee = 25; // rule初始价格
+    ManualFareRule manual_fare_rule = 26; // 人工fareRule匹配
+    RepoRule repo_rule = 27; // 仓库里面的rule
+}
+
+message RepoRule {
+    repeated string repo_ids = 1;
+    string currency = 2;
+    ManualRuleFee refund_fee = 4; // 全部未使用退票费 refund_before_fee
+    ManualRuleFee change_fee = 6; // 全部未使用改期费
+    ManualRuleFee part_refund_fee = 5; // 部分未使用退票费
+    ManualRuleFee part_change_fee = 7; // 部分未使用改期费
+    ManualRuleFee no_show_refund_fee = 8; // 全部未使用no show 退票费
+    ManualRuleFee no_show_change_fee = 9; // 全部未使用no show 改期费
+    ManualRuleFee no_show_refund_after_fee = 10; // 部分未使用no show 退票费
+    ManualRuleFee no_show_change_after_fee = 11; // 部分未使用no show 改期费
+}
+
+message ManualFareRule {
+    string display_number = 1;
+    string currency = 2;
+    ManualRuleFee refund_fee = 4; // 全部未使用退票费
+    ManualRuleFee part_refund_fee = 5; // 部分未使用退票费
+    ManualRuleFee change_fee = 6; // 全部未使用改期费
+    ManualRuleFee part_change_fee = 7; // 部分未使用改期费
+    ManualRuleFee no_show_fee = 8; // no show费用
+}
+
+message ManualRuleFee {
+    bool is_permit = 1; // 退改允许否
+    double fee = 2; // 退改费用
+}
+
 message Baggage {
     int32 free_baggage_piece = 1; //1      3         2     0
     double free_baggage_weight = 2; // 0    0         25     25
     bool baggage_check = 4; // 是否重新检查行李
 }
 
-enum FareType {
-    PRIVATE = 0;
-    PUBLISHED = 1;
+message Passenger {
+    string name = 1;
+    int32 age_type = 2; // 0 成人 1 儿童 2 婴儿
+    string birthday = 3;
+    Gender gender = 4;
+    string card_number = 5;
+    string card_type = 6;
+    string card_issue_place = 7;
+    string card_expired = 8; // yyyy-MM-dd
+    string nationality = 9;
+    string airline_code = 10;
+    string airline_card_no = 11;
+    string ticket_number = 12;
+
+    /*qunar-snail-params*/
+    string tag = 13; //举例： 成人（OPL4）， 3个儿童（CHI3）
+    //mystifly-lcc
+    repeated ExtraService extra_service = 14;
+    //daran
+    PassengerBaggage passenger_baggage = 15;
 }
 
-message Rule {
-    string  refund = 1;
+message Contact {
+    string name = 1;
+    string address = 2;
+    string postcode = 3;
+    string email = 4;
+    string mobile = 5;
+    string user_name = 6;
+    string user_address = 7;
+    string user_postcode = 8;
+    string user_email = 9;
+    string user_mobile = 10;
+
+    //snail param
+    string pre_mobile = 11; //国家区位码  86
 }
 
-enum ProviderType {
-    PROVIDER_API = 0;
-    PROVIDER_SABRE_1B = 1;
-    PROVIDER_SABRE_1S = 2;
-    PROVIDER_AMADEUS_1A = 3;
-    PROVIDER_TRAVELPORT_1P = 4;
-    PROVIDER_TRAVELPORT_1G = 5;
-    PROVIDER_ETERM = 6;
-    PROVIDER_OTHER = 7;
+message OperationContext {
+    string operator = 1;
+    string snapshot = 2;
 }
 
-message CurrencyConversion {
-    string from = 1;
-    string to = 2;
-    double rate = 3;
-    string source = 4;
-    google.protobuf.Timestamp timestamp = 5;
-    string policy_id = 6;
+message BaseAnalysisReqData {
+    google.protobuf.Timestamp request_start_at = 1; //请求开始时间
+    google.protobuf.Timestamp request_finish_at = 2; //请求结束时间
+    int32 response_code = 3; //响应结果 200 500 505 等
 }
 
-message PriceChangesByPolicy {
-    string policy_desc = 3; //desc of the policy
-    string display_number = 4; // 政策编号 前端要用
-    string policy_id = 5; // 政策ID 前端要用
-    PolicyType policy_type = 6; // 政策类型
-    PriceChangeByPolicy adult_change = 1;
-    PriceChangeByPolicy child_change = 2;
-    PriceChangeByPolicy infant_change = 7;
-    bool is_fee_apply_to_provider = 9;
-    repeated PercentageChangeDetail other_percentage_change_details = 8;
-    repeated AbsChangeDetail other_abs_change_details = 10;
+message ExtraService {
+    string service_id = 1; //mystifly serviceId
+    ServiceType service_type = 2; //服务类型， 例如: 行李
+    string service_behavior = 3; //服务适用
+    string service_content = 4; //服务具体内容， 例如：行李额度等等
+    LccServiceCost lcc_service_cost = 5;
 }
 
-enum PolicyType{
-    COMMISSION = 0; // 前返
-    BACKEND = 1; // 后返
-    INCENTIVE = 2; // 航段奖励
-    MARKUP = 3; // 供应加价
-    PLATFORM = 4; // 平台
-    TICKET_FEE = 5; // 开票费
-    UNI_MARKUP = 6; // 统一加价
-    VCC = 7; // vcc
-    FARE_RULE = 8; //farerule
-    MANUAL_FARE_RULE = 9; //人工farerule
-    AI = 10; //自动调价
+message LccServiceCost {
+    string Amount = 1;
+    string CurrencyCode = 2;
+    int32 DecimalPlaces = 3;
 }
 
-message PriceChangeByPolicy {
-    PercentageChange percentage_change = 1;
-    AbsChange abs_change = 2;
-    AbsChange total_change = 3;
+enum ServiceType {
+    SERVICE_TYPE_BAGGAGE = 0; //行李
+    SERVICE_TYPE_SPEEDY_BOARDING = 1;
+    SERVICE_TYPE_CHECKIN_CHARGE = 2;
 }
 
-message PercentageChange {
-    double percentage = 1;
-    bool excludeTax = 2;
+message PassengerBaggage {
+    string passenger_name = 1;
+    repeated DaranBaggage baggages = 2;
 }
 
-message AbsChange {
-    double amount = 1;
-    string currency = 2;
+message DaranBaggage {
+    string flight = 1; //航班号
+    string from_airport = 2; //出发机场
+    string to_airport = 3; //到达机场
+    string dep_time = 4; //起飞时间 YYYYMMDDHHMM
+    string cabin = 5; //舱位
+    repeated DaranBaggagePrice baggage_prices = 6; //购买价格集合
 }
 
-message PercentageChangeDetail {
-    PercentageChangeDetailDesc desc = 1; // 是什么类型的百分比
-    double percentage_change = 2; // 配置的百分比是多少
-    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+message DaranBaggagePrice {
+    double weight = 1; //行李重量【KG】
+    double book_sale_price = 2; //预定购买价【RMB】
+    double ticket_sale_price = 3; //出票后购买价【RMB】
+    double airport_sale_price = 4; //机场购买价【RMB】
+    double refund_fee = 5; //退行李费
+    string desc = 6; //服务描述
 }
 
-enum PercentageChangeDetailDesc {
-    ADULT_YQ_CHANGE = 0;
-    ADULT_YR_CHANGE = 1;
-    ADULT_UO_CHANGE = 2;
-    CHILD_YQ_CHANGE = 3;
-    CHILD_YR_CHANGE = 4;
-    CHILD_UO_CHANGE = 5;
-    VCC_ADULT_RECEIVABLE = 6;
-    VCC_CHILD_RECEIVABLE = 7;
+message Platform {
+    string site = 1;
+    string subSite = 2;
+    string cid = 3;
 }
 
-message AbsChangeDetail {
-    AbsChangeDetailDesc desc = 1; // 是什么类型的绝对值
-    AbsChange abs_total = 2; //原始绝对值以及币种
-    AbsChange total_change = 3; // 换算成对应币种的绝对值是多少
+message Provider {
+    string name = 1;
+    string pcc = 2;
 }
 
-enum AbsChangeDetailDesc {
-    INCENTIVE_RECEIVABLE = 0;
+message AnalysisSearchResponse {
+    int32 response_code = 1;
+    string msg = 2;
+    bool is_success = 3;
+    int32 routing_amount = 4;
+    bool cache_hit = 5;
+    bool search_throttled = 6;
+    int32 reuse_fare_rule_amount = 7;
 }
 
-message EvictionMark {
-    string eviction_reason = 1;
-    repeated TraceSpan trace_spans = 2;
-}
-
-message TraceSpan {
-    /*
-    * 该消息体用来保存各种需要trace的处理记录，例如在搜索时需要记录匹配上的黑白名单、以及应用过的各种政策
-    */
-    string span_id = 1; // 匹配上的实体的ID，如果该Span记录的是一次政策，这该字段对应政策ID；同理，如果记录的是一次黑白名单，则对应的是黑白名单的ID
-    enum TraceType {
-        None = 0;
-        WB = 1;
-        POLICY = 2;
-        OTHERS = 3;
+message AnalysisSearchData {
+    string trace_id = 1;
+    YuetuSearchRequest request = 2;
+    Platform platform_info = 3;
+    Provider provider = 4;
+    AnalysisSearchResponse response = 5;
+    google.protobuf.Timestamp timestamp = 6;
+    enum SearchState {
+        Na = 0;
+        ProviderHit = 1;
+        LimitedByS2b = 2;
+        LimitInfant = 3;
+        WorkingTimeLimit = 4;
+        SellingTimeLimit = 5;
+        ProviderNotFound = 6;
+        ProviderClientStateErr = 7;
+        SellingCabinGradeLimit = 8;
+        CacheHit = 9;
+        ProviderThrottled = 10;
+        PlatformTimeout = 11;
+        BalanceLimit = 12;
     }
-    TraceType trace_type = 2;
-    string application = 3;
-    string desc = 4;
-    map<string, string> tags = 16; // 用来存放额外的信息
-    google.protobuf.Timestamp created_at = 17;
+    SearchState state = 8;
 }
 
-message TraceTimes {
+message AnalysisVerifyData {
     string trace_id = 1;
-    TraceTimer self = 2;
-    repeated TraceTimers sub_timers = 3;
-    bool persist = 4; //是否持久化
+    YuetuVerifyRequest request = 2;
+    Platform platform_info = 3;
+    Provider provider = 4;
+    YuetuVerifyResponse response = 5;
+    google.protobuf.Timestamp request_start_at = 6;
+    google.protobuf.Timestamp request_finish_at = 7;
+    int32 response_code = 8;
+    JumpPrice jump_price = 9;
+    string response_type = 10;
+    string referred_trace_id = 11;
+    AIPolicyChangeInfo auto_adjustment = 12;
 }
 
-message TraceTimers {
-    string trace_id = 1;
-    TraceTimer self = 2;
-    repeated TraceTimers sub_timers = 3;
-    bool persist = 4; //是否持久化
+message JumpPrice {
+    double adult_jump = 1;
+    double child_jump = 2;
+    double infant_jump = 3;
+}
+
+message AdditionalReqInfo {
+    string ctrip_channel = 1;
+    string ctrip_main_channel = 2;
+    string ctrip_sub_channel_id = 3;
 }
 
 message TraceTimer {
@@ -381,28 +890,104 @@ message TraceTimer {
     AdditionalReqInfo additional_req_info = 11;
     string dep_date = 12;
     string ret_date = 13;
-    TripType trip_type = 14;
-    string dep_city = 15;
-    string arr_city = 16;
-    string dep_country = 17;
-    string arr_country = 18;
+    string city_route = 14;
+    string country_route = 15;
 }
 
-enum TripType {
-    OW = 0;
-    RT = 1;
-    MT = 2;
-    UNKNOWN = 3; // 未知 主要用于去哪增值外派订单
+message TraceTimers {
+    string trace_id = 1;
+    TraceTimer self = 2;
+    repeated TraceTimers sub_timers = 3;
+    bool persist = 4; //是否持久化
 }
 
-message AdditionalReqInfo {
-    string ctrip_channel = 1;
-    string ctrip_main_channel = 2;
-    string ctrip_sub_channel_id = 3;
+message FareRuleInfo {
+    FareRuleAmount change_before_departure = 1;
+    FareRuleAmount change_after_departure = 2;
+    FareRuleAmount change_any = 3;
+    FareRuleAmount refund_before_departure = 4;
+    FareRuleAmount refund_after_departure = 5;
+    FareRuleAmount refund_any = 6;
 }
 
-message AIPolicyChangeInfo {
-    double adult_adjust_amount = 1; //自动调价金额
-    string adult_adjust_currency = 2; //自动调价币种
-    string policy_number = 3; //政策编号
+message FareRuleAmount {
+    bool allowed = 1;
+    double charge_amount = 2;
+    ChargeType charge_type = 3;
+    bool no_show_allowed = 4;
+    double no_show_charge_amount = 5;
+    ChargeType no_show_charge_type = 6;
+    string currency = 7;
+    string no_show_currency = 8;
+    bool not_default_value = 9; // true sabre解析出的值  false proto 生成默认值
+    enum ChargeType {
+        ONE_WAY = 0;
+        ROUND_TRIP = 1;
+        TICKET = 2;
+        COUPON = 3;
+        DIRECTION = 4;
+    }
+}
+
+message SabreTextRule {
+    string text_rule = 1;
+}
+
+message AIPolicyAdjustmentLogs {
+    repeated AIPolicyAdjustmentLog logs = 1;
+}
+
+message AIPolicyAdjustmentLog {
+    string policy_number = 1;
+    string trip_type = 2;
+    repeated string marketing_carriers = 3;
+    repeated string flight_numbers = 4;
+    repeated string booking_classes = 5;
+    google.protobuf.Timestamp timestamp = 6;
+    string dep_city = 7;
+    string arr_city = 8;
+    string platform_cid = 9;
+    string low_price_source = 10;
+    AbsChange change = 11; //调价金额
+    string based_price_type = 12;
+    double fare_amount = 13; //票面价
+    double total_amount = 14; //全价
+    string trace_id = 15;
+    double low_price = 16;
+    google.protobuf.Timestamp dep_date = 17;
+    google.protobuf.Timestamp ret_date = 18;
+    double publish_price = 19;
+    int32 adult_num = 20;
+    int32 child_num = 21;
+    repeated string exclude_booking_classes = 22;
+}
+
+enum AirlineCrawl {
+    ANA = 0;
+    JAL_EXP = 1;
+    EST = 2;
+}
+
+message NotifySpiderOrderStatusChangeRequest {
+    AirlineCrawl airline = 1;
+    string flightNum = 2;
+    string depCode = 3;
+    string arrCode = 4;
+    string depDate = 5;
+    string retDate = 6;
+    enum spiderOrderStatus {
+        CREATE = 0;
+        TICKETING = 1;
+        CANCEL = 2;
+    }
+    spiderOrderStatus orderStatus = 7;
+    string orderNum = 8;
+    int32 passengerNum = 9;
+    double total_price = 10;
+}
+
+message NotifySpiderOrderStatusChangeResponse {
+    string orderNum = 1;
+    bool statusAllowed = 2;
+    string msg = 3;
 }
