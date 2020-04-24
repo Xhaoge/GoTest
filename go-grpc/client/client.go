@@ -24,10 +24,10 @@ func main() {
 			Cid: "qunarytb",
 			TraceId: "2354435-jgidg",
 		},
-		Trip:&pb.Trip{
-			DepartureCode:"CNX",
-			ArrivalCode:"BKK",
-			DepartureDate:"20200720",
+		Trip:[]*pb.Trip{{
+			DepartureCode: "CNX",
+			ArrivalCode:   "BKK",
+		},
 		},
 		Cabin: pb.CabinClass_E,
 		AdultNum:1,

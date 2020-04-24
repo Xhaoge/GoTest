@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	pb "godie/go-grpc/protos"
 	"log"
@@ -26,10 +27,10 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 	fmt.Println("YuetuSearchRequest: ", r)
 	req := map[string]string{
 		"Cid":r.BaseRequest.Cid,
-		"FromCity":r.Trip.DepartureCode,
-		"ToCity":r.Trip.ArrivalCode,
-		"Cabin":string(r.Cabin),
-		"FromDate":r.Trip.DepartureDate,
+		"FromCity":r.Trip[0].DepartureCode,
+		"ToCity":r.Trip[0].ArrivalCode,
+		"Cabin":"E",
+		"FromDate":"20200628",
 		"TripType":"1",
 	}
 	myReq.SetSendType("json")
@@ -45,22 +46,26 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*pb.YuetuSearchResponse, error) {
 	res ,_ := buildYuetuReq(r)
 	fmt.Println("type res: ",reflect.TypeOf(&res))
-	//var resp pb.YuetuSearchResponse
-	//err := json.Unmarshal(res,&resp)
-	//if err != nil {
-	//	fmt.Println("[]byte to struct err: ",err)
-	//}
+	var resp pb.YuetuSearchResponse
+	err := json.Unmarshal(res,&resp)
+	if err != nil {
+		fmt.Println("[]byte to struct err: ",err)
+	}
 	fmt.Println("YuetuSearchResponse string:  ",string(res))
-	return &pb.YuetuSearchResponse{
-		BaseResponse:&pb.SimpleResponse{
-			Status:200,
-			Message:"success",
-			Cid:"yuetu",
-			TraceId:"jwoejoag-jiejg",
-			Pid:"mondee",
-		},
-		SessionId:"24526345662",
-	}, nil
+	fmt.Println("YuetuSearchResponse baseresponse:  ",resp.BaseResponse)
+	fmt.Println("YuetuSearchResponse routing:  ",resp.Routing)
+	fmt.Println("YuetuSearchResponse:  ",resp)
+	return &resp,nil
+	//return &pb.YuetuSearchResponse{
+	//	BaseResponse:&pb.SimpleResponse{
+	//		Status:200,
+	//		Message:"success",
+	//		Cid:"yuetu",
+	//		TraceId:"jwoejoag-jiejg",
+	//		Pid:"mondee",
+	//	},
+	//	SessionId:"24526345662",
+	//}, nil
 }
 
 
