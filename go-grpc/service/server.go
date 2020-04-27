@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"reflect"
+	"strings"
 
 	"github.com/Xhaoge/sh/myhttp"
 	"google.golang.org/grpc"
@@ -46,6 +47,10 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*pb.YuetuSearchResponse, error) {
 	res ,_ := buildYuetuReq(r)
 	fmt.Println("type res: ",reflect.TypeOf(&res))
+	dec := json.NewDecoder(strings.NewReader(string(res)))
+	fmt.Println("dec: ",dec)
+
+
 	var resp pb.YuetuSearchResponse
 	err := json.Unmarshal(res,&resp)
 	if err != nil {
