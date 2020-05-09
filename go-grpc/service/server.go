@@ -30,7 +30,7 @@ func buildYuetuReq(r *pb.YuetuSearchRequest)([]byte, error) {
 		"Cid":r.BaseRequest.Cid,
 		"FromCity":r.Trip[0].DepartureCode,
 		"ToCity":r.Trip[0].ArrivalCode,
-		"Cabin":"E",
+		"Cabin":string(r.Cabin),
 		"FromDate":"20200628",
 		"TripType":"1",
 	}
@@ -52,25 +52,27 @@ func (s *SearchService) Search(ctx context.Context, r *pb.YuetuSearchRequest) (*
 
 
 	var resp pb.YuetuSearchResponse
-	err := json.Unmarshal(res,&resp)
-	if err != nil {
-		fmt.Println("[]byte to struct err: ",err)
+	var baseresp = &pb.SimpleResponse{
+		Status:200,
+		Message:"success",
+		Cid:"yuetu",
+		TraceId:"jwoejoag-jiejg",
+		Pid:"mondee",
 	}
-	fmt.Println("YuetuSearchResponse string:  ",string(res))
-	fmt.Println("YuetuSearchResponse baseresponse:  ",resp.BaseResponse)
-	fmt.Println("YuetuSearchResponse routing:  ",resp.Routing)
-	fmt.Println("YuetuSearchResponse:  ",resp)
+	fmt.Println(baseresp)
+	resp.BaseResponse = baseresp
+	resp.SessionId = "24526345662"
+
+	//err := json.Unmarshal(res,&resp)
+	//if err != nil {
+	//	fmt.Println("[]byte to struct err: ",err)
+	//}
+	//fmt.Println("YuetuSearchResponse string:  ",string(res))
+	//fmt.Println("YuetuSearchResponse baseresponse:  ",resp.BaseResponse)
+	//fmt.Println("YuetuSearchResponse routing:  ",resp.Routing)
+	//fmt.Println("YuetuSearchResponse:  ",resp)
 	return &resp,nil
-	//return &pb.YuetuSearchResponse{
-	//	BaseResponse:&pb.SimpleResponse{
-	//		Status:200,
-	//		Message:"success",
-	//		Cid:"yuetu",
-	//		TraceId:"jwoejoag-jiejg",
-	//		Pid:"mondee",
-	//	},
-	//	SessionId:"24526345662",
-	//}, nil
+
 }
 
 
