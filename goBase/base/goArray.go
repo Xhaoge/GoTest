@@ -38,13 +38,21 @@ func main() {
 	}
 	fmt.Println("array after: ", darr, "切片容量为：", cap(darr), "切片长度为：", len(darr))
 	fmt.Println("old slice : ", dslice)
-	dslice = append(dslice, 23, 54, 56, 8888,7,87,99,678,50,29,66,109)
-	fmt.Println("new slice : ", dslice,"切片容量为：", cap(dslice), "切片长度为：", len(dslice))
+	dslice = append(dslice, 23, 54, 56, 8888, 7, 87, 99, 678, 50, 29, 66, 109)
+	fmt.Println("new slice : ", dslice, "切片容量为：", cap(dslice), "切片长度为：", len(dslice))
 
 	var arrS []interface{}
 	var v nnn
 	v.Name = "xhaoge"
-	arrS = append(arrS,v)
+	arrS = append(arrS, v)
 	arrS[0] = v
-	fmt.Println("arrS:",arrS)
+	fmt.Println("arrS:", arrS)
+
+	Array_a := [10]byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'}
+	Slice_a := Array_a[2:5]
+	fmt.Println(len(Slice_a), cap(Slice_a))
+
+	// array_b := [3]int{1, 2, 3}
+	// array_b = append(array_b, 44)
+	// fmt.Println("array_b: ", array_b)
 }
