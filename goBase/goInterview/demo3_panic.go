@@ -40,11 +40,11 @@ func main() {
 			ticker := time.NewTicker(time.Second * 1)
 			defer ticker.Stop()
 			select {
-			case <-ticker.C
+			case <-ticker.C:
 				i++
 				go goproc(i)
 			}
-			
+
 		}
 	}()
 	select {}
