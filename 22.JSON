@@ -1,161 +1,466 @@
 {
-  "cerrorCode": "0",
-  "cerrorMsg": "success",
-  "maxSeats": 9,
-  "msg": "success",
-  "orderContact": {
-    "email": "service@gloryholiday.com",
-    "mobile": "8617810070559"
+  "_id" : ObjectId("5ebcb7cda7eb5787b276fa2e"),
+  "archived" : false,
+  "enabled" : false,
+  "creator" : "System",
+  "createdat" : ISODate("2020-05-14T11:15:25.408+08:00"),
+  "updatetime" : ISODate("2020-05-14T11:35:44.566+08:00"),
+  "revision" : 6,
+  "packagenumber" : "GH20200514KJQH9",
+  "flightorderid" : "FJYXG5-1",
+  "yuetupnr" : "FJYXG5",
+  "providergroup" : "sabre",
+  "providername" : "ssgmt",
+  "providerorderno" : "",
+  "orderstatus" : "ORDER_CREATED_SUCCESS",
+  "pnrs" : [
+    "ILSLSB"
+  ],
+  "pnrstatus" : "PNR_NORMAL",
+  "reusedpnrflightorderid" : "",
+  "nextdaypurchase" : false,
+  "ordercreatedat" : ISODate("2020-05-14T11:15:34.587+08:00"),
+  "ordertypeinfo" : {
+    "ordertype" : "INNER",
+    "source" : "ssgmt",
+    "remark" : ""
   },
-  "orderNo": "F7W78O",
-  "passengerbaggages": [],
-  "pnrCode": "F7W78O",
-  "routing": {
-    "adultAgeRestriction": "",
-    "adultPrice": 643,
-    "adultTax": 116,
-    "adultTaxType": 0,
-    "airlineAncillaries": {
-      "baggageService": false,
-      "unFreeBaggage": false
-    },
-    "applyType": 0,
-    "bookingOfficeNo": "",
-    "childPrice": 629,
-    "childPublishPrice": 625,
-    "childTax": 116,
-    "childTaxType": 0,
-    "complexTerm": 0,
-    "data": "f6e96e8c-6ef1-45e0-b3c1-568eefc24e7c#c4d8eb5e-0bd5-412c-ad9d-c2b3c0525496#B7511_E#0",
-    "eligibility": "NOR",
-    "exchange": 0,
-    "fareBasis": "VLOG",
-    "forbiddenNationality": "",
-    "fromSegments": [
+  "requestedtkt" : false,
+  "providersessionid" : "",
+  "providerbookingid" : "",
+  "vccpassed" : false,
+  "pqstatus" : "PS_UNKNOWN",
+  "tktdeadline" : ISODate("1970-01-01T08:00:00.000+08:00"),
+  "requesttkttype" : "TT_SYSTEM",
+  "providercabinchange" : false,
+  "segmentcountinfo" : {
+    "pervalidsegmentcounts" : [
       {
-        "aircraftCode": "321",
-        "arrAirport": "XMN",
-        "arrTerminal": "T3",
-        "arrTime": "202010161840",
-        "cabin": "V",
-        "cabinCount": 9,
-        "cabinGrade": "Y",
-        "carrier": "B7",
-        "codeShare": false,
-        "depAirport": "TSA",
-        "depTerminal": "T1",
-        "depTime": "202010161700",
-        "duration": 100,
-        "flightNumber": "B7511",
-        "operatingCarrier": "B7",
-        "operatingFlightNo": "B7511",
-        "stopAirports": "",
-        "stopCities": ""
+        "passengertype" : "PT_ADT",
+        "segmentcount" : 2
+      },
+      {
+        "passengertype" : "PT_CHD",
+        "segmentcount" : 0
+      },
+      {
+        "passengertype" : "PT_INF",
+        "segmentcount" : 0
       }
     ],
-    "infantPrice": 0,
-    "infantPublishPrice": 0,
-    "infantTax": 0,
-    "invoiceType": "F",
-    "maxPassengerCount": 9,
-    "maxStay": "365",
-    "minPassengerCount": 1,
-    "minStay": "0",
-    "nationality": "",
-    "planCategory": 0,
-    "posCode": "TW",
-    "priceType": 0,
-    "productType": "PUB",
-    "publishPrice": 625,
-    "reservationType": "1B",
-    "retSegments": [],
-    "rule": {
-      "changesInfoList": [
-        {
-          "changesFee": 610,
-          "changesStatus": "H",
-          "changesType": 0,
-          "cnRevRemark": "1.涉及多程和多国的签证须自理，若因签证等原因产生的损失自行承担。2.退改期请起飞前72小时，否则进入误机状态无法退票和改期。周一到周五09：00-16：00提交（周六日及节假日不受理）3.行李额按照航司规定 5.请提前值机并打印值机凭证随身携带。4.订单支付成功后，无法更改乘机信息。5.购票后，请关注您的邮箱邮件，我们会把您机票的相关资料给您发送到邮箱，提醒关注您的垃圾邮箱，避免遗漏您的重要机票资料而影响登机。 7*24小时客服电话010-86445118 YT",
-          "conditionList": null,
-          "currency": "CNY",
-          "enRevRemark": "",
-          "passengerType": 0,
-          "revNoShowCondition": 72,
-          "revNoshow": "T",
-          "revNoshowFee": 0
-        },
-        {
-          "changesFee": 610,
-          "changesStatus": "H",
-          "changesType": 0,
-          "cnRevRemark": "1.涉及多程和多国的签证须自理，若因签证等原因产生的损失自行承担。2.退改期请起飞前72小时，否则进入误机状态无法退票和改期。周一到周五09：00-16：00提交（周六日及节假日不受理）3.行李额按照航司规定 5.请提前值机并打印值机凭证随身携带。4.订单支付成功后，无法更改乘机信息。5.购票后，请关注您的邮箱邮件，我们会把您机票的相关资料给您发送到邮箱，提醒关注您的垃圾邮箱，避免遗漏您的重要机票资料而影响登机。 7*24小时客服电话010-86445118 YT",
-          "conditionList": null,
-          "currency": "CNY",
-          "enRevRemark": "",
-          "passengerType": 1,
-          "revNoShowCondition": 72,
-          "revNoshow": "T",
-          "revNoshowFee": 0
-        }
-      ],
-      "fareRuleMatchMode": 1,
-      "formatBaggageInfoList": [
-        {
-          "baggagePiece": -1,
-          "baggageWeight": 30,
-          "cnBaggage": "",
-          "enBaggage": "",
-          "passengerType": 0,
-          "segmentNo": 1
-        },
-        {
-          "baggagePiece": -1,
-          "baggageWeight": 30,
-          "cnBaggage": "",
-          "enBaggage": "",
-          "passengerType": 1,
-          "segmentNo": 1
-        }
-      ],
-      "isUseCtripRule": true,
-      "note": "1.涉及多程和多国的签证须自理，若因签证等原因产生的损失自行承担。2.退改期请起飞前72小时，否则进入误机状态无法退票和改期。周一到周五09：00-16：00提交（周六日及节假日不受理）3.行李额按照航司规定 5.请提前值机并打印值机凭证随身携带。4.订单支付成功后，无法更改乘机信息。5.购票后，请关注您的邮箱邮件，我们会把您机票的相关资料给您发送到邮箱，提醒关注您的垃圾邮箱，避免遗漏您的重要机票资料而影响登机。 7*24小时客服电话010-86445118 YT",
-      "refundInfoList": [
-        {
-          "cnRefRemark": "1.涉及多程和多国的签证须自理，若因签证等原因产生的损失自行承担。2.退改期请起飞前72小时，否则进入误机状态无法退票和改期。周一到周五09：00-16：00提交（周六日及节假日不受理）3.行李额按照航司规定 5.请提前值机并打印值机凭证随身携带。4.订单支付成功后，无法更改乘机信息。5.购票后，请关注您的邮箱邮件，我们会把您机票的相关资料给您发送到邮箱，提醒关注您的垃圾邮箱，避免遗漏您的重要机票资料而影响登机。 7*24小时客服电话010-86445118 YT",
-          "conditionList": null,
-          "currency": "CNY",
-          "enRefRemark": "",
-          "passengerType": 0,
-          "refNoShowCondition": 72,
-          "refNoshow": "T",
-          "refNoshowFee": 0,
-          "refundFee": 910,
-          "refundStatus": "H",
-          "refundType": 0
-        },
-        {
-          "cnRefRemark": "1.涉及多程和多国的签证须自理，若因签证等原因产生的损失自行承担。2.退改期请起飞前72小时，否则进入误机状态无法退票和改期。周一到周五09：00-16：00提交（周六日及节假日不受理）3.行李额按照航司规定 5.请提前值机并打印值机凭证随身携带。4.订单支付成功后，无法更改乘机信息。5.购票后，请关注您的邮箱邮件，我们会把您机票的相关资料给您发送到邮箱，提醒关注您的垃圾邮箱，避免遗漏您的重要机票资料而影响登机。 7*24小时客服电话010-86445118 YT",
-          "conditionList": null,
-          "currency": "CNY",
-          "enRefRemark": "",
-          "passengerType": 1,
-          "refNoShowCondition": 72,
-          "refNoshow": "T",
-          "refNoshowFee": 0,
-          "refundFee": 910,
-          "refundStatus": "H",
-          "refundType": 0
-        }
-      ],
-      "ruleNo": "",
-      "tariffNo": "PUB"
-    },
-    "ticketingOfficeNo": "",
-    "validatingCarrier": "B7"
+    "pertotalsegmentcounts" : [
+      {
+        "passengertype" : "PT_ADT",
+        "segmentcount" : 2
+      },
+      {
+        "passengertype" : "PT_CHD",
+        "segmentcount" : 0
+      },
+      {
+        "passengertype" : "PT_INF",
+        "segmentcount" : 0
+      }
+    ],
+    "ordervalidsegmentcount" : 2,
+    "ordertotalsegmentcount" : 2
   },
-  "sessionId": "9555342554",
-  "status": 0,
-  "valueAddResult": {
-    "shoppingCarts": null
+  "historyorder" : false,
+  "vccapplyid" : "",
+  "requesttkttime" : ISODate("1970-01-01T08:00:00.000+08:00"),
+  "receivedtktnumbertime" : ISODate("1970-01-01T08:00:00.000+08:00"),
+  "pnrexpirytime" : ISODate("2020-05-15T19:00:00.000+08:00"),
+  "pnrtktdeadlinetime" : ISODate("2020-07-18T23:59:00.000+08:00"),
+  "pnrovernighttime" : ISODate("2020-05-15T00:59:59.000+08:00"),
+  "pnrearliesttkttime" : ISODate("2020-05-14T11:15:34.587+08:00"),
+  "pnrlatesttkttime" : ISODate("2020-05-15T00:59:59.000+08:00"),
+  "paxtktnuminfos" : [
+    {
+      "passengerinfo" : {
+        "name" : "SHEN/HAONAN",
+        "gender" : "FEMALE",
+        "dob" : "19960305",
+        "nationality" : "CN",
+        "document" : {
+          "type" : "DT_PP",
+          "number" : "KJ465521",
+          "expiredat" : "20230511",
+          "issuedby" : "CN"
+        },
+        "passengertype" : "PT_ADT"
+      },
+      "ticketnumberinfo" : [
+        {
+          "segmentindex" : 0,
+          "tktno" : ""
+        },
+        {
+          "segmentindex" : 1,
+          "tktno" : ""
+        }
+      ]
+    }
+  ],
+  "tripinfo" : {
+    "validatingcarrier" : "PR",
+    "triptype" : "OW",
+    "faretype" : "PUBLISHED",
+    "deploc" : {
+      "airportcode" : "SIN",
+      "citycode" : "SIN",
+      "countrycode" : "SG"
+    },
+    "arrloc" : {
+      "airportcode" : "BKK",
+      "citycode" : "BKK",
+      "countrycode" : "TH"
+    },
+    "depdate" : "20200817",
+    "retdate" : "",
+    "itineraries" : [
+      {
+        "deploc" : {
+          "airportcode" : "SIN",
+          "citycode" : "SIN",
+          "countrycode" : "SG"
+        },
+        "arrloc" : {
+          "airportcode" : "BKK",
+          "citycode" : "BKK",
+          "countrycode" : "TH"
+        },
+        "depdate" : "202008170030",
+        "arrdate" : "202008171215",
+        "durationminutes" : 765,
+        "segments" : [
+          {
+            "index" : 0,
+            "cabin" : "E",
+            "bookingclass" : "T",
+            "marketingcarrier" : "PR",
+            "marketingflightnumber" : "PR510",
+            "operatingcarrier" : "PR",
+            "operatingflightnumber" : "PR510",
+            "deploc" : {
+              "airportcode" : "SIN",
+              "citycode" : "SIN",
+              "countrycode" : "SG"
+            },
+            "arrloc" : {
+              "airportcode" : "MNL",
+              "citycode" : "MNL",
+              "countrycode" : "PH"
+            },
+            "depat" : "202008170030",
+            "arrat" : "202008170410",
+            "bjsdepat" : "202008170030",
+            "bjsarrat" : "202008170410",
+            "airlinelocator" : "WEUZYW",
+            "durationminutes" : 220,
+            "aircraftcode" : "321",
+            "depterminal" : "T1",
+            "arrterminal" : "T2",
+            "faretype" : "PUBLISHED",
+            "farebasises" : [
+              {
+                "passengertype" : "PT_ADT",
+                "farebasis" : "TFSG"
+              },
+              {
+                "passengertype" : "PT_CHD",
+                "farebasis" : ""
+              },
+              {
+                "passengertype" : "PT_INF",
+                "farebasis" : ""
+              }
+            ],
+            "baggageallowance" : {
+              "freebaggagepiece" : -1,
+              "freebaggageweight" : 25,
+              "baggagecheck" : false
+            },
+            "stopinfo" : [ ]
+          },
+          {
+            "index" : 1,
+            "cabin" : "E",
+            "bookingclass" : "T",
+            "marketingcarrier" : "PR",
+            "marketingflightnumber" : "PR730",
+            "operatingcarrier" : "PR",
+            "operatingflightnumber" : "PR730",
+            "deploc" : {
+              "airportcode" : "MNL",
+              "citycode" : "MNL",
+              "countrycode" : "PH"
+            },
+            "arrloc" : {
+              "airportcode" : "BKK",
+              "citycode" : "BKK",
+              "countrycode" : "TH"
+            },
+            "depat" : "202008170945",
+            "arrat" : "202008171215",
+            "bjsdepat" : "202008170945",
+            "bjsarrat" : "202008171315",
+            "airlinelocator" : "WEUZYW",
+            "durationminutes" : 210,
+            "aircraftcode" : "333",
+            "depterminal" : "T2",
+            "arrterminal" : "",
+            "faretype" : "PUBLISHED",
+            "farebasises" : [
+              {
+                "passengertype" : "PT_ADT",
+                "farebasis" : "TAP30TTH"
+              },
+              {
+                "passengertype" : "PT_CHD",
+                "farebasis" : ""
+              },
+              {
+                "passengertype" : "PT_INF",
+                "farebasis" : ""
+              }
+            ],
+            "baggageallowance" : {
+              "freebaggagepiece" : -1,
+              "freebaggageweight" : 25,
+              "baggagecheck" : false
+            },
+            "stopinfo" : [ ]
+          }
+        ]
+      }
+    ]
+  },
+  "priceinfo" : {
+    "summarypriceinfo" : {
+      "commissionpolicy" : {
+        "policyid" : "5dca8b40fa321c0001c73e76",
+        "policydisplaynumber" : "CM191112SGT4"
+      },
+      "commissionapply" : true,
+      "backendpolicy" : {
+        "policyid" : "",
+        "policydisplaynumber" : ""
+      },
+      "backendapply" : false,
+      "tktfeepolicy" : {
+        "policyid" : "5e9e613ce388790001aae40f",
+        "policydisplaynumber" : "TF200421VOI5"
+      },
+      "tktfeeapply" : true,
+      "incentivepolicy" : {
+        "policyid" : "5dcd283a228a2c0001f8f62e",
+        "policydisplaynumber" : "IC191114RBID"
+      },
+      "incentiveapply" : false,
+      "vccpolicy" : {
+        "policyid" : "",
+        "policydisplaynumber" : ""
+      },
+      "vccapply" : false,
+      "providertotalprice" : 7025.90430966285,
+      "providerjumpprice" : 0,
+      "providertotalcost" : 1635.2334590316002,
+      "commissionfareadjust" : -45.02,
+      "commissiontaxadjust" : -27.2,
+      "backendadjust" : 0,
+      "tktfeeadjust" : 55.813344052316076,
+      "incentiveadjust" : -4,
+      "incentivereceivable" : 2,
+      "vccadjust" : 0,
+      "vccreceivable" : 0
+    },
+    "fareinfos" : [
+      {
+        "passengertype" : "PT_ADT",
+        "pqtype" : "ADT",
+        "providerfare" : 4835,
+        "providertax" : 2045,
+        "yqtax" : 645,
+        "yrtax" : 35,
+        "uotax" : 0,
+        "commissionfareadjust" : -45.02,
+        "commissiontaxadjust" : -27.2,
+        "backendadjust" : 0,
+        "tktfeeadjust" : 55.813344052316076,
+        "incentivediscount" : 4,
+        "incentivereceivable" : 2,
+        "vccadjust" : 0,
+        "vccreceivable" : 0,
+        "providertotalprice" : 7025.90430966285,
+        "providerjumpamount" : 0,
+        "totalcost" : 1635.2334590316002,
+        "passengercount" : 1,
+        "commissionpercentage" : 1.2,
+        "commissionabs" : 13,
+        "commissionyq" : 4,
+        "commissionyr" : 4,
+        "commissionuo" : 4,
+        "backendpercentage" : 0,
+        "backendabs" : 0,
+        "tktfeepercentage" : 3,
+        "tktfeeabs" : 3,
+        "incentiveadjust" : -4,
+        "vccdiscount" : 0
+      },
+      {
+        "passengertype" : "PT_CHD",
+        "pqtype" : "",
+        "providerfare" : 4835,
+        "providertax" : 2045,
+        "yqtax" : 645,
+        "yrtax" : 35,
+        "uotax" : 0,
+        "commissionfareadjust" : -171.02,
+        "commissiontaxadjust" : -27.2,
+        "backendadjust" : 0,
+        "tktfeeadjust" : 55.813344052316076,
+        "incentivediscount" : 4,
+        "incentivereceivable" : 2,
+        "vccadjust" : 0,
+        "vccreceivable" : 0,
+        "providertotalprice" : 6899.90430966285,
+        "providerjumpamount" : 0,
+        "totalcost" : 1605.6526129116003,
+        "passengercount" : 0,
+        "commissionpercentage" : 1.2,
+        "commissionabs" : -113,
+        "commissionyq" : 4,
+        "commissionyr" : 4,
+        "commissionuo" : 4,
+        "backendpercentage" : 0,
+        "backendabs" : 0,
+        "tktfeepercentage" : 3,
+        "tktfeeabs" : 3,
+        "incentiveadjust" : -4,
+        "vccdiscount" : 0
+      },
+      {
+        "passengertype" : "PT_INF",
+        "pqtype" : "",
+        "providerfare" : 0,
+        "providertax" : 0,
+        "yqtax" : 0,
+        "yrtax" : 0,
+        "uotax" : 0,
+        "commissionfareadjust" : 0,
+        "commissiontaxadjust" : 0,
+        "backendadjust" : 0,
+        "tktfeeadjust" : 0,
+        "incentivediscount" : 0,
+        "incentivereceivable" : 0,
+        "vccadjust" : 0,
+        "vccreceivable" : 0,
+        "providertotalprice" : 0,
+        "providerjumpamount" : 0,
+        "totalcost" : 0,
+        "passengercount" : 0,
+        "commissionpercentage" : 0,
+        "commissionabs" : 0,
+        "commissionyq" : 0,
+        "commissionyr" : 0,
+        "commissionuo" : 0,
+        "backendpercentage" : 0,
+        "backendabs" : 0,
+        "tktfeepercentage" : 3,
+        "tktfeeabs" : 3,
+        "incentiveadjust" : 0,
+        "vccdiscount" : 0
+      }
+    ]
+  },
+  "currencyinfo" : {
+    "providercurrency" : "THB",
+    "mastercurrency" : "CNY",
+    "providermasterrate" : {
+      "originalcurrency" : "THB",
+      "targetcurrency" : "CNY",
+      "exchangerate" : 0.23476862
+    },
+    "providercnyrate" : {
+      "originalcurrency" : "THB",
+      "targetcurrency" : "CNY",
+      "exchangerate" : 0.23476862
+    },
+    "incentivecurrency" : "USD",
+    "incentivemasterrate" : {
+      "originalcurrency" : "USD",
+      "targetcurrency" : "CNY",
+      "exchangerate" : 7.1142
+    },
+    "tktfeecurrency" : "HKD",
+    "tktfeemasterrate" : {
+      "originalcurrency" : "HKD",
+      "targetcurrency" : "CNY",
+      "exchangerate" : 0.9175
+    }
+  },
+  "ruleinfo" : {
+    "internalrulemessage" : {
+      "refundbefore" : "ALLOW",
+      "refundbeforefee" : 7305,
+      "refundbeforenoshow" : "UNKNOWN",
+      "refundbeforenoshowfee" : 0,
+      "refundafter" : "DENY",
+      "refundafterfee" : 0,
+      "refundafternoshow" : "UNKNOWN",
+      "refundafternoshowfee" : 0,
+      "changebefore" : "ALLOW",
+      "changebeforefee" : 6068,
+      "changebeforenoshow" : "UNKNOWN",
+      "changebeforenoshowfee" : 0,
+      "changeafter" : "ALLOW",
+      "changeafterfee" : 6068,
+      "changeafternoshow" : "UNKNOWN",
+      "changeafternoshowfee" : 0
+    },
+    "rulesource" : "PROVIDER",
+    "rulesourceid" : "",
+    "outrulemessage" : {
+      "refundbefore" : "ALLOW",
+      "refundbeforefee" : 2230,
+      "refundbeforenoshow" : "UNKNOWN",
+      "refundbeforenoshowfee" : 0,
+      "refundafter" : "DENY",
+      "refundafterfee" : 0,
+      "refundafternoshow" : "UNKNOWN",
+      "refundafternoshowfee" : 0,
+      "changebefore" : "ALLOW",
+      "changebeforefee" : 1860,
+      "changebeforenoshow" : "UNKNOWN",
+      "changebeforenoshowfee" : 0,
+      "changeafter" : "ALLOW",
+      "changeafterfee" : 1860,
+      "changeafternoshow" : "UNKNOWN",
+      "changeafternoshowfee" : 0
+    },
+    "rulepolicy" : {
+      "policyid" : "5e13f791ec33f90001a9c3d9",
+      "policydisplaynumber" : "FR2001070L7D"
+    },
+    "rulecurrencyinfo" : {
+      "originalcurrency" : "THB",
+      "policycurrency" : "CNY",
+      "originalmasterrate" : {
+        "originalcurrency" : "THB",
+        "targetcurrency" : "CNY",
+        "exchangerate" : 0.23476862
+      },
+      "policymasterrate" : {
+        "originalcurrency" : "CNY",
+        "targetcurrency" : "CNY",
+        "exchangerate" : 1
+      }
+    }
+  },
+  "settlementinfo" : {
+    "settleneeded" : true,
+    "settletype" : "st_payable",
+    "settlechannel" : "PC_PROVIDER",
+    "settlechanneldetail" : "ssgmt"
   }
 }
